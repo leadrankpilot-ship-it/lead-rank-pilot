@@ -4,14 +4,13 @@ Business lead finder + AI blog automation.
 
 **Stack:** Next.js (frontend) · FastAPI / Python (backend) · existing Playwright Google Maps scraper (wrapped, not rewritten)
 
-See `PHASES.md` for the staged roadmap.
-
 ## Project layout
 
 ```
-frontend/   Next.js App Router UI
-backend/    FastAPI API + scraper service
-PHASES.md   Staged implementation roadmap
+frontend/              Next.js App Router UI
+backend/               FastAPI API + scraper service
+leadrankpilot-plugin/  WordPress connector plugin
+docs/                  Ops + publish contract notes
 ```
 
 ## Run locally
@@ -47,10 +46,6 @@ npm run dev
 App: http://localhost:3000
 
 Copy `frontend/.env.local.example` → `frontend/.env.local` if needed (`NEXT_PUBLIC_API_URL=http://localhost:8000`).
-
-## Current phase
-
-**All phases 0–8 complete.** Ready for paid launch when Stripe live keys + ops checklist are signed off.
 
 ### Auth / foundation API
 

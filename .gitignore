@@ -7,8 +7,11 @@ backend/.venv/
 backend/data/
 .env
 backend/.env
+backend/env
 *.egg-info/
 .pytest_cache/
+.cursor/
+frontend/AGENTS.md
 
 # Node / Next.js
 frontend/node_modules/

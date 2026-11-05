@@ -21,7 +21,6 @@
 
 ## Launch gates
 
-- [ ] `python scripts/test_subscription_gate.py` → `subscription-gate-ok`
 - [ ] Paid plan margins ≥ `MIN_PAID_PLAN_MARGIN_USD` and ratio ≥ `MIN_PAID_PLAN_MARGIN_RATIO`
 - [ ] `BILLING_MODE=live` only with Stripe price IDs + webhook secret configured
 - [ ] `BLOG_GENERATION_MODE` / `WORDPRESS_MODE` set intentionally for production
