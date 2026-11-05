@@ -1,0 +1,9 @@
+parameters:
+  level: 5
+  paths:
+    - leadrankpilot-plugin.php
+    - uninstall.php
+    - src
+  bootstrapFiles:
+    - stubs/wordpress.php
+  treatPhpDocTypesAsCertain: false

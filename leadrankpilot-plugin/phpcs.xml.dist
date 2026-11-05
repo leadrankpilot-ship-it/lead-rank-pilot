@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="LeadRankPilot">
+  <description>LeadRankPilot WordPress plugin coding standard</description>
+  <file>./leadrankpilot-plugin.php</file>
+  <file>./uninstall.php</file>
+  <file>./src</file>
+  <arg name="basepath" value="."/>
+  <arg name="extensions" value="php"/>
+  <arg value="s"/>
+  <rule ref="WordPress">
+    <exclude name="WordPress.Files.FileName"/>
+  </rule>
+  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+    <properties>
+      <property name="prefixes" type="array">
+        <element value="lrp"/>
+        <element value="LeadRankPilot"/>
+      </property>
+    </properties>
+  </rule>
+</ruleset>

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+backend/.venv/
+backend/data/
+.env
+backend/.env
+*.egg-info/
+.pytest_cache/
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/.env*.local
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local blueprint source for the AI writer (chat export, book HTML, PDF)
+docs/niche-article-blueprint-chat.md
+docs/niche-article-blueprint/
+docs/The-Complete-Content-Writing-and-SEO-Blueprint.pdf

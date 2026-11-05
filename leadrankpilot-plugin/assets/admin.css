@@ -1,0 +1,74 @@
+.lrp-admin__lead {
+  max-width: 62rem;
+  color: #50575e;
+}
+
+.lrp-admin__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  max-width: 960px;
+}
+
+.lrp-card {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  padding: 16px 20px 20px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.lrp-card--wide {
+  grid-column: 1 / -1;
+}
+
+.lrp-card h2 {
+  margin-top: 0;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1d2327;
+}
+
+.lrp-token {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 6px 8px;
+  background: #f6f7f7;
+  border-radius: 4px;
+}
+
+.lrp-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.lrp-pill--ok {
+  background: #edfaef;
+  color: #007017;
+}
+
+.lrp-pill--warn {
+  background: #fcf9e8;
+  color: #996800;
+}
+
+.lrp-endpoints {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.lrp-endpoints li {
+  margin-bottom: 6px;
+}
+
+@media (max-width: 782px) {
+  .lrp-admin__grid {
+    grid-template-columns: 1fr;
+  }
+}
