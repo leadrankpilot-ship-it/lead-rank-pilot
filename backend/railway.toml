@@ -1,11 +1,10 @@
-# Railway: Root Directory = backend ; public domain port = 8080
+# Root Directory = backend | Domain target port = 8080
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-# Keep in sync with Dockerfile CMD. Use 8080 to match generated domain port.
-startCommand = "alembic upgrade head || echo 'WARN: alembic failed'; uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+startCommand = "echo PORT=$PORT; alembic upgrade head || echo WARN_alembic_failed; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"
 restartPolicyType = "ON_FAILURE"
 healthcheckPath = "/api/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 100

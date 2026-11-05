@@ -5,7 +5,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+    PORT=8080
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends curl ca-certificates \
@@ -13,12 +13,12 @@ RUN apt-get update \
 
 COPY requirements.txt .
 RUN pip install --upgrade pip \
-  && pip install -r requirements.txt \
-  && playwright install --with-deps chromium
+  && pip install -r requirements.txt
 
 COPY . .
 
+# Do NOT install Playwright browsers in the image (OOM / slow boot on free Railway).
+# Maps scrape can install browsers later on a worker; API must stay light.
 EXPOSE 8080
 
-# Always start uvicorn even if migrations fail (so /api/health can report DB status).
-CMD ["sh", "-c", "alembic upgrade head || echo 'WARN: alembic failed'; uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["sh", "-c", "echo PORT=$PORT; alembic upgrade head || echo WARN_alembic_failed; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
