@@ -1,0 +1,9 @@
+.venv
+__pycache__
+*.pyc
+.env
+env
+*.md
+scripts
+.pytest_cache
+data
