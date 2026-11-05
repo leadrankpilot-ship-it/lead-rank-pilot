@@ -18,6 +18,7 @@ RUN pip install --upgrade pip \
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Always start uvicorn even if migrations fail (so /api/health can report DB status).
+CMD ["sh", "-c", "alembic upgrade head || echo 'WARN: alembic failed'; uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
