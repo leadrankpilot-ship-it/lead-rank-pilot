@@ -1,4 +1,17 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+/** Browser: same-origin (Vercel rewrites → Railway). Server: BACKEND_URL or local. */
+export function resolveApiUrl(): string {
+  const fromPublic = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+  if (fromPublic) return fromPublic;
+  if (typeof window === "undefined") {
+    const backend = (process.env.BACKEND_URL || "").replace(/\/$/, "");
+    if (backend) return backend;
+    return "http://localhost:8000";
+  }
+  return "";
+}
+
+/** @deprecated use resolveApiUrl() — kept for any legacy imports */
+export const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "";
 
 const TOKEN_KEY = "lrp_token";
 
@@ -21,7 +34,7 @@ async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}${path}`, { ...init, headers, cache: "no-store" });
+  const res = await fetch(`${resolveApiUrl()}${path}`, { ...init, headers, cache: "no-store" });
   if (!res.ok) {
     let detail = `Request failed (${res.status})`;
     try {
@@ -337,7 +350,7 @@ export async function uploadBlogImage(file: File, slugHint?: string): Promise<Bl
   const token = getToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}/api/blogs/images`, {
+  const res = await fetch(`${resolveApiUrl()}/api/blogs/images`, {
     method: "POST",
     headers,
     body: form,
@@ -360,7 +373,7 @@ export function mediaUrl(pathOrUrl: string): string {
   const value = (pathOrUrl || "").trim();
   if (!value) return "";
   if (/^https?:\/\//i.test(value)) return value;
-  if (value.startsWith("/")) return `${API_URL}${value}`;
+  if (value.startsWith("/")) return `${resolveApiUrl()}${value}`;
   return value;
 }
 
@@ -437,7 +450,7 @@ export async function upsertConnection(input: {
 
 export async function downloadBlogExport(postId: number, format: "md" | "html"): Promise<void> {
   const token = getToken();
-  const res = await fetch(`${API_URL}/api/blogs/posts/${postId}/export.${format}`, {
+  const res = await fetch(`${resolveApiUrl()}/api/blogs/posts/${postId}/export.${format}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
     cache: "no-store",
   });
@@ -676,7 +689,7 @@ export async function getSearchDuplicates(
 
 export async function downloadSearchCsv(searchId: number, filters: LeadFilters = {}): Promise<void> {
   const token = getToken();
-  const res = await fetch(`${API_URL}/api/searches/${searchId}/export.csv${toQuery(filters)}`, {
+  const res = await fetch(`${resolveApiUrl()}/api/searches/${searchId}/export.csv${toQuery(filters)}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
     cache: "no-store",
   });
@@ -746,5 +759,3 @@ export async function disableSavedSearch(id: number): Promise<SavedSearch> {
 export async function recheckSavedSearch(id: number): Promise<SearchRun> {
   return apiFetch(`/api/saved-searches/${id}/recheck`, { method: "POST" });
 }
-
-export { API_URL };

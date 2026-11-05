@@ -1,4 +1,13 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+function resolveApiUrl(): string {
+  const fromPublic = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+  if (fromPublic) return fromPublic;
+  if (typeof window === "undefined") {
+    const backend = (process.env.BACKEND_URL || "").replace(/\/$/, "");
+    if (backend) return backend;
+    return "http://localhost:8000";
+  }
+  return "";
+}
 
 const ADMIN_TOKEN_KEY = "lrp_admin_token";
 
@@ -21,7 +30,7 @@ async function adminFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getAdminToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_URL}${path}`, { ...init, headers, cache: "no-store" });
+  const res = await fetch(`${resolveApiUrl()}${path}`, { ...init, headers, cache: "no-store" });
   if (!res.ok) {
     let detail = `Request failed (${res.status})`;
     try {
