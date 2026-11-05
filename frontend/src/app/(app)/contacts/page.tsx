@@ -447,7 +447,7 @@ export default function ContactsPage() {
     const startedAt = Date.now();
     let lastPct = -1;
     let lastPctAt = Date.now();
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    let timer: number | null = null;
     const QUEUED_STUCK_MS = 45_000;
     const RUNNING_STALL_MS = 180_000;
     const HARD_CAP_MS = 25 * 60_000;

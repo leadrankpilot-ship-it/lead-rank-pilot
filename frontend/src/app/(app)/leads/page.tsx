@@ -578,7 +578,7 @@ export default function LeadsPage() {
     const startedAt = Date.now();
     let lastPct = -1;
     let lastPctAt = Date.now();
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    let timer: number | null = null;
 
     // Stop endless GET spam if worker never leaves "queued" (e.g. uvicorn --reload killed the thread)
     const QUEUED_STUCK_MS = 45_000;

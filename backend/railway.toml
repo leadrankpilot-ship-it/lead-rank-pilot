@@ -1,3 +1,4 @@
+# Railway service root directory must be `backend`
 [build]
 builder = "NIXPACKS"
 
