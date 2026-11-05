@@ -1,18 +1,18 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { API_URL, fetchApiHealth } from "@/lib/api";
+import { fetchApiHealth } from "@/lib/api";
 
 async function BackendStatus() {
-  let label = "offline";
+  let online = false;
   try {
     const health = await fetchApiHealth();
-    label = health.status === "ok" ? "online" : health.status;
+    online = health.status === "ok";
   } catch {
-    label = "offline";
+    online = false;
   }
   return (
     <p className="text-xs tracking-wide text-[var(--text-nav-muted)]">
-      System {label} · {API_URL}
+      {online ? "System online" : "System offline"}
     </p>
   );
 }
