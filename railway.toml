@@ -1,0 +1,10 @@
+# Railway UI:
+# - Root Directory: LEAVE EMPTY (repo root)
+# - Builder: Dockerfile
+# - Public domain port: 8080
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"

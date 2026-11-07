@@ -15,8 +15,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
-RUN chmod +x start.sh
 
 EXPOSE 8080
 
-CMD ["./start.sh"]
+CMD ["sh", "-c", "python -c \"import app.main; print('import_ok')\" && echo listening_on_${PORT:-8080} && exec python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} --log-level info --proxy-headers"]

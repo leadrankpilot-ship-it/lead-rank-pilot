@@ -1,10 +1,8 @@
-# REQUIRED in Railway UI:
-# - Root Directory: backend
-# - Networking public domain port: 8080
+# Prefer repo-root Dockerfile + empty Root Directory.
+# Kept only as fallback if Root Directory is set to `backend`.
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "./start.sh"
 restartPolicyType = "ON_FAILURE"
