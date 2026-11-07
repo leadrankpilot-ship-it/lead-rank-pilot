@@ -25,6 +25,7 @@ from app.core.config import settings
 from app.core.logging import setup_logging
 from app.db.session import SessionLocal
 from app.services.admin_seed import ensure_admin_user
+from app.services.db_maintenance import sync_id_sequences
 from app.services.image_upload import uploads_root
 from app.services.plans import ensure_plan_catalog
 
@@ -34,9 +35,10 @@ logger.info("main module loaded; cors=%s", settings.cors_origin_list)
 
 
 def _run_startup_jobs() -> None:
-    """Seed only — do not run alembic on boot (hangs on some Neon/Railway networks)."""
+    """Seed + sequence repair — do not run alembic on boot (can hang on Railway)."""
     db = SessionLocal()
     try:
+        sync_id_sequences(db)
         ensure_admin_user(db)
         ensure_plan_catalog(db)
         logger.info("admin/plan seed OK")
