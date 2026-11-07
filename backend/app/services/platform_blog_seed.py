@@ -24,7 +24,7 @@ _DEMO_POSTS = (
         "title": "How to find local leads with Maps search",
         "excerpt": "A practical playbook for operators who need qualified local businesses—without spending hours on manual Google hunting.",
         "read_time": "6 min",
-        "cover_image_url": "https://images.unsplash.com/photo-1524661132064-1f1fc0ef986d?auto=format&fit=crop&w=1400&q=80",
+        "cover_image_url": "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=1400&q=80",
         "body": """Local lead gen still starts with one question: who nearby actually needs what you sell?
 
 With LeadRankPilot, you run a Maps search by category and location, then get a ranked list of businesses—names, locations, websites, and signals that help you prioritize outreach.
@@ -67,7 +67,7 @@ Lead search finds who to talk to. Contact discovery makes the conversation possi
         "title": "Publish AI blog drafts to WordPress without the chaos",
         "excerpt": "Connect a site, generate drafts that match your brand, then approve and publish—without bouncing between five tools.",
         "read_time": "7 min",
-        "cover_image_url": "https://images.unsplash.com/photo-1499750310107-5fef28ed9a63?auto=format&fit=crop&w=1400&q=80",
+        "cover_image_url": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1400&q=80",
         "body": """Content ops break when drafting, editing, and publishing live in different places.
 
 LeadRankPilot keeps AI blog generation inside the same workspace as lead gen: connect WordPress (or a custom endpoint), generate a draft from your site profile, edit, approve, then publish.
@@ -87,12 +87,17 @@ If you already run lead campaigns, pairing outreach with fresh site content comp
 
 
 def ensure_demo_platform_blogs(db: Session) -> None:
-    """Insert demo posts only when those slugs are missing."""
+    """Insert missing demo posts; refresh cover URLs on existing demo slugs."""
     created = 0
+    updated = 0
     today = date.today()
     for i, post in enumerate(_DEMO_POSTS):
         exists = db.query(PlatformBlog).filter(PlatformBlog.slug == post["slug"]).first()
         if exists is not None:
+            if (exists.cover_image_url or "") != post["cover_image_url"]:
+                exists.cover_image_url = post["cover_image_url"]
+                db.add(exists)
+                updated += 1
             continue
         db.add(
             PlatformBlog(
@@ -108,6 +113,6 @@ def ensure_demo_platform_blogs(db: Session) -> None:
             )
         )
         created += 1
-    if created:
+    if created or updated:
         db.commit()
-        logger.info("seeded %s demo platform blogs", created)
+        logger.info("demo platform blogs created=%s updated_covers=%s", created, updated)
