@@ -106,7 +106,7 @@ function BillingInner() {
   return (
     <div className="mx-auto w-full max-w-5xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[#111827]">Billing</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-[#111827] sm:text-2xl">Billing</h1>
         <p className="mt-1 text-sm text-[#6B7280]">
           Manage your plan, payment method, and upgrades.
         </p>
@@ -268,7 +268,7 @@ function BillingInner() {
           </Link>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {plans.map((p) => {
             const current = p.id === sub.plan_id;
             const paid = p.id === "starter" || p.id === "pro";

@@ -27,7 +27,7 @@ function MockConfirmInner() {
   }, [params, router]);
 
   return (
-    <main className="mx-auto max-w-lg px-6 py-16 text-sm">
+    <main className="mx-auto max-w-lg px-4 py-10 text-sm sm:px-6 sm:py-16">
       {error ? (
         <>
           <p className="text-red-700">{error}</p>

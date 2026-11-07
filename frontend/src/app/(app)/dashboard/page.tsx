@@ -170,15 +170,15 @@ export default function DashboardPage() {
 
   return (
     <div className="pt-2">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[#111827]">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="truncate text-xl font-semibold tracking-tight text-[#111827] sm:text-2xl">
             Welcome back, {firstName}
           </h1>
         </div>
         <Link
           href="/billing"
-          className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-sm font-semibold text-[#111827] hover:bg-[#F9FAFB]"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-sm font-semibold text-[#111827] hover:bg-[#F9FAFB] sm:w-auto"
         >
           Manage billing
         </Link>
@@ -190,8 +190,8 @@ export default function DashboardPage() {
         </div>
       ) : null}
 
-      <section className="lrp-card mt-6 !p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+      <section className="lrp-card mt-6 !p-4 sm:!p-5">
+        <div className="flex flex-col gap-5 lg:flex-row lg:flex-wrap lg:items-start lg:justify-between">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#6B7280]">
               Current plan
@@ -208,7 +208,7 @@ export default function DashboardPage() {
               {renewText}
             </p>
           </div>
-          <div className="grid min-w-[220px] flex-1 gap-4 sm:grid-cols-3 sm:max-w-xl">
+          <div className="grid w-full min-w-0 flex-1 gap-4 sm:grid-cols-3 sm:max-w-xl">
             <Meter used={websites.length} max={stats.sitesMax} label="Sites" />
             <Meter
               used={blogQuota.used}

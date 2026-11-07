@@ -1109,8 +1109,8 @@ export default function LeadsPage() {
 
       {/* Results toolbar */}
       <section className="lrp-card overflow-hidden !p-0">
-        <div className="border-b border-[#E5E7EB] px-6 py-4">
-          <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="border-b border-[#E5E7EB] px-4 py-4 sm:px-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
             <div className="min-w-0">
               <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#6B7280]">Results</p>
               <h2 className="mt-0.5 text-lg font-bold text-[#111827]">
@@ -1125,9 +1125,9 @@ export default function LeadsPage() {
               ) : null}
             </div>
 
-            <div className="flex flex-col items-end gap-2">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
               <div
-                className="inline-flex flex-wrap justify-end rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] p-1"
+                className="inline-flex w-full flex-wrap justify-start gap-1 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] p-1 sm:w-auto sm:justify-end"
                 role="tablist"
                 aria-label="Result lists"
               >
@@ -1156,7 +1156,7 @@ export default function LeadsPage() {
                 ))}
               </div>
 
-              <div className="flex flex-wrap items-center justify-end gap-2" role="toolbar" aria-label="List actions">
+              <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end" role="toolbar" aria-label="List actions">
                 {resultsTab === "current" ? (
                   <>
                     <button
@@ -1231,7 +1231,7 @@ export default function LeadsPage() {
         </div>
 
         {(running || claiming) && displayedLeads.length === 0 ? (
-          <div className="space-y-3 px-6 py-6">
+          <div className="space-y-3 px-4 py-6 sm:px-6">
             {[0, 1, 2].map((i) => (
               <div key={i} className="grid grid-cols-[80px_1fr_120px_100px] gap-3">
                 <div className="lrp-skeleton" />

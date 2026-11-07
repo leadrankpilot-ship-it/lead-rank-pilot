@@ -872,9 +872,9 @@ export default function ContactsPage() {
       {bizMergeModal}
 
       <section className="lrp-card space-y-5 !pt-4">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <h1 className="smx-report-title !m-0">Contact Finder</h1>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
             {!mapsMode ? (
               <span className="text-sm font-semibold text-[#7C3AED]">
                 {manualReadyCount} / {manualMaxUrls}
@@ -974,8 +974,8 @@ export default function ContactsPage() {
       </section>
 
       <section className="lrp-card !p-0 overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E7EB] px-5 py-3">
-          <div className="flex items-center gap-1">
+        <div className="flex flex-col gap-3 border-b border-[#E5E7EB] px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-5">
+          <div className="flex flex-wrap items-center gap-1">
             {(
               [
                 { id: "current" as const, label: "Current", count: leads.length },
@@ -1038,7 +1038,7 @@ export default function ContactsPage() {
         </div>
 
         {(running || claiming) && displayed.length === 0 ? (
-          <div className="space-y-3 px-6 py-6">
+          <div className="space-y-3 px-4 py-6 sm:px-6">
             {[0, 1, 2].map((i) => (
               <div key={i} className="grid grid-cols-[1fr_120px_140px_100px] gap-3">
                 <div className="lrp-skeleton" />

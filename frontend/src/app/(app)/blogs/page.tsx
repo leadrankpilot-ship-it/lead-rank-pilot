@@ -468,15 +468,15 @@ export default function BlogsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2" role="tablist" aria-label="AI blogs">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="flex gap-2 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]" role="tablist" aria-label="AI blogs">
           {pageTabs.map((item) => (
             <button
               key={item.id}
               type="button"
               role="tab"
               aria-selected={tab === item.id}
-              className={`smx-pill ${tab === item.id ? "is-accent" : ""}`}
+              className={`smx-pill shrink-0 ${tab === item.id ? "is-accent" : ""}`}
               onClick={() => {
                 setViewMode("preview");
                 if (item.id === "site" && !selected) startAddSite();
@@ -487,12 +487,12 @@ export default function BlogsPage() {
             </button>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
           <span className="lrp-badge">
             {quota.remaining}/{quota.limit} left today
           </span>
           {sites.length > 0 ? (
-            <label className="leads-field leads-field--select !min-w-[160px]">
+            <label className="leads-field leads-field--select w-full !min-w-0 sm:w-auto sm:!min-w-[160px]">
               <select
                 value={selected ? String(selected.id) : ""}
                 onChange={(e) => {

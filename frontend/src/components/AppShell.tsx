@@ -304,7 +304,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </svg>
           </button>
 
-          <Link href="/dashboard" className="smx-snav__brand">
+          <Link href="/dashboard" className="smx-snav__brand min-w-0">
             <span className="smx-snav__logo">L</span>
             <span className="smx-snav__name">LeadRankPilot</span>
           </Link>
@@ -312,7 +312,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           <nav className="smx-snav__links">
             <Link href="/pricing">Pricing</Link>
             <Link href="/billing" className="smx-snav__cta">
-              {planId === "free" ? "Start free trial" : "Upgrade"}
+              <span className="sm:hidden">{planId === "free" ? "Upgrade" : "Plan"}</span>
+              <span className="hidden sm:inline">{planId === "free" ? "Start free trial" : "Upgrade"}</span>
             </Link>
             <div className="smx-snav__profile" ref={profileRef}>
               <button
