@@ -70,12 +70,12 @@ export function PostClient() {
                     const internal =
                       Boolean(link.related_post_id) || link.url.startsWith("/blog/");
                     const cardClass =
-                      "flex items-center justify-between gap-4 rounded-2xl border border-[#2A2A2A] bg-[#141414] px-5 py-4 transition hover:border-[#3F3F3F] hover:bg-[#1A1A1A]";
+                      "flex items-center justify-between gap-4 rounded-2xl border border-sm-border bg-sm-surface px-5 py-4 shadow-[var(--shadow-card)] transition hover:border-[#C190FF] hover:bg-[#F5EDFF]";
                     const body = (
                       <>
                         <div className="min-w-0 text-left">
-                          <p className="text-[15px] font-semibold leading-snug text-white">{link.title}</p>
-                          <p className="mt-1 text-xs text-[#9CA3AF]">
+                          <p className="text-[15px] font-semibold leading-snug text-sm-ink">{link.title}</p>
+                          <p className="mt-1 text-xs text-sm-muted">
                             {internal ? "Internal article" : external ? "External link" : "Related link"}
                           </p>
                         </div>
