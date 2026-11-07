@@ -118,11 +118,11 @@ function metaFor(pathname: string) {
     return {
       suite: "Account",
       title: "Billing",
-      reportTitle: "Subscription Overview",
+      reportTitle: "Billing",
       crumbs: ["Home", "Account", "Billing"],
-      filters: ["Monthly", "USD"],
-      hideSubAndFilters: false,
-      hideReportHead: false,
+      filters: [] as string[],
+      hideSubAndFilters: true,
+      hideReportHead: true,
     };
   }
   if (pathname.startsWith("/profile")) {
