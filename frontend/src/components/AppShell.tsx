@@ -310,6 +310,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
 
           <nav className="smx-snav__links">
+            <Link href="/blog">Blog</Link>
             <Link href="/pricing">Pricing</Link>
             <Link href="/billing" className="smx-snav__cta">
               <span className="sm:hidden">{planId === "free" ? "Upgrade" : "Plan"}</span>

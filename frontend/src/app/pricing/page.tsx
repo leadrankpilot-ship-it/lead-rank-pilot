@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { PublicSiteHeader } from "@/components/PublicSiteHeader";
 import { Plan, getToken, listPlans, startCheckout } from "@/lib/api";
 
 export default function PricingPage() {
@@ -37,23 +38,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-full flex-1 bg-sm-canvas text-sm-ink">
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-6">
-        <Link href="/" className="flex min-w-0 items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-sm-orange text-sm font-bold text-white">
-            L
-          </span>
-          <span className="truncate text-sm font-semibold tracking-tight">LeadRankPilot</span>
-        </Link>
-        <div className="flex shrink-0 items-center gap-3">
-          <Link href="/login" className="text-sm font-semibold text-sm-muted hover:text-sm-ink sm:hidden">
-            Sign in
-          </Link>
-          <Link href="/billing" className="text-sm font-semibold text-sm-orange hover:underline">
-            <span className="sm:hidden">Billing</span>
-            <span className="hidden sm:inline">Account billing</span>
-          </Link>
-        </div>
-      </header>
+      <PublicSiteHeader variant="light" />
       <main className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-20">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Plans</h1>
         <p className="mt-2 max-w-xl text-sm text-sm-muted sm:text-[15px]">

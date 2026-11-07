@@ -16,6 +16,7 @@ from app.api.routes import (
     health,
     jobs,
     leads,
+    platform_blogs,
     reference_custom,
     searches,
     websites,
@@ -106,6 +107,7 @@ app.include_router(leads.router, prefix=settings.api_prefix)
 app.include_router(blogs.router, prefix=settings.api_prefix)
 app.include_router(connections.router, prefix=settings.api_prefix)
 app.include_router(billing.router, prefix=settings.api_prefix)
+app.include_router(platform_blogs.router, prefix=settings.api_prefix)
 app.include_router(reference_custom.router, prefix=settings.api_prefix)
 app.mount("/media", StaticFiles(directory=str(uploads_root())), name="media")
 

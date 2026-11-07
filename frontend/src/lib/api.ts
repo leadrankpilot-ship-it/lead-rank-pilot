@@ -700,3 +700,31 @@ export async function downloadSearchCsv(searchId: number, filters: LeadFilters =
   a.click();
   URL.revokeObjectURL(url);
 }
+
+export type PlatformBlogLink = {
+  title: string;
+  url: string;
+  related_post_id?: number | null;
+};
+
+export type PlatformBlog = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  cover_image_url: string;
+  published_on: string | null;
+  read_time: string;
+  related_links: PlatformBlogLink[];
+  status: string;
+  created_at: string | null;
+};
+
+export async function listPlatformBlogs(): Promise<PlatformBlog[]> {
+  return apiFetch("/api/platform-blogs");
+}
+
+export async function getPlatformBlog(slug: string): Promise<PlatformBlog> {
+  return apiFetch(`/api/platform-blogs/${encodeURIComponent(slug)}`);
+}

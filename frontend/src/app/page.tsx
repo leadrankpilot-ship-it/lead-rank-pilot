@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PublicSiteHeader } from "@/components/PublicSiteHeader";
 
 export default function Home() {
   return (
@@ -12,28 +13,7 @@ export default function Home() {
         className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] [background-size:48px_48px]"
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-6">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-[var(--bg-primary)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(255,98,47,0.4)]">
-            L
-          </span>
-          <p className="truncate text-sm font-semibold tracking-tight text-white">LeadRankPilot</p>
-        </div>
-        <nav className="flex shrink-0 items-center gap-2 text-sm text-[var(--text-nav-muted)] sm:gap-4">
-          <Link href="/pricing" className="hidden hover:text-white sm:inline">
-            Pricing
-          </Link>
-          <Link href="/login" className="px-1 hover:text-white sm:px-0">
-            Sign in
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-[var(--radius-s)] bg-[var(--bg-primary)] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[var(--bg-primary-hover)] sm:px-3 sm:text-sm"
-          >
-            Start free
-          </Link>
-        </nav>
-      </header>
+      <PublicSiteHeader variant="dark" />
 
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-10">
         <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--orange-400)] sm:mb-4">
@@ -64,6 +44,12 @@ export default function Home() {
             className="inline-flex min-h-11 w-full items-center justify-center rounded-[var(--radius-s)] border border-[var(--border-nav)] px-5 py-3 text-sm font-semibold text-white transition hover:border-[var(--orange-500)] active:scale-[0.98] sm:w-auto"
           >
             Open workspace
+          </Link>
+          <Link
+            href="/blog"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-[var(--radius-s)] px-5 py-3 text-sm font-semibold text-[var(--text-nav-muted)] transition hover:text-white sm:hidden"
+          >
+            Blog
           </Link>
           <Link
             href="/pricing"
