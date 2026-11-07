@@ -159,3 +159,38 @@ async def save_blog_image(upload: UploadFile, *, slug_hint: str | None = None) -
         "id": str(uuid.uuid4()),
         "storage": "local",
     }
+
+
+def cloudinary_public_id_from_url(url: str | None) -> str | None:
+    text = (url or "").strip()
+    if "res.cloudinary.com" not in text or "/upload/" not in text:
+        return None
+    try:
+        after = text.split("/upload/", 1)[1]
+        # drop transform segments / version prefix (v123/)
+        parts = [p for p in after.split("/") if p]
+        if parts and parts[0].startswith("v") and parts[0][1:].isdigit():
+            parts = parts[1:]
+        if not parts:
+            return None
+        joined = "/".join(parts)
+        if "." in parts[-1]:
+            joined = joined.rsplit(".", 1)[0]
+        return joined or None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def destroy_blog_image(url: str | None) -> None:
+    """Best-effort delete for Cloudinary-hosted covers. Local /media files are ignored."""
+    public_id = cloudinary_public_id_from_url(url)
+    if not public_id or not cloudinary_enabled():
+        return
+    import cloudinary.uploader
+
+    _configure_cloudinary()
+    try:
+        cloudinary.uploader.destroy(public_id, resource_type="image", invalidate=True)
+    except Exception:  # noqa: BLE001
+        # Never block blog delete/update on cleanup failure.
+        return

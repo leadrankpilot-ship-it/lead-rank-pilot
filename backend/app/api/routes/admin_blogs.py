@@ -11,7 +11,7 @@ from app.models.platform_blog import PlatformBlog
 from app.models.user import User
 from app.schemas.admin import AdminBlogCreate, AdminBlogOut, AdminBlogUpdate, AdminRelatedLink
 from app.services.blog_categories import normalize_blog_category
-from app.services.image_upload import save_blog_image
+from app.services.image_upload import destroy_blog_image, save_blog_image
 
 router = APIRouter(prefix="/admin/blogs", tags=["admin-blogs"])
 
@@ -183,7 +183,11 @@ def update_admin_blog(
     if body.body is not None:
         row.body = body.body
     if body.cover_image_url is not None:
-        row.cover_image_url = body.cover_image_url.strip()
+        new_cover = body.cover_image_url.strip()
+        old_cover = row.cover_image_url or ""
+        if old_cover and old_cover != new_cover:
+            destroy_blog_image(old_cover)
+        row.cover_image_url = new_cover
     if body.category is not None:
         row.category = normalize_blog_category(body.category)
     if body.published_on is not None:
@@ -209,5 +213,6 @@ def delete_admin_blog(
     row = db.get(PlatformBlog, blog_id)
     if row is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog not found")
+    destroy_blog_image(row.cover_image_url)
     db.delete(row)
     db.commit()

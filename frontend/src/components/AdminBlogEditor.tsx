@@ -82,8 +82,18 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
     setUploading(true);
     try {
       const saved = await uploadAdminBlogImage(file, slug || title);
-      setCoverUrl(saved.url);
-      setNote("Cover image uploaded.");
+      const nextUrl = (saved.url || saved.path || "").trim();
+      if (!nextUrl) {
+        throw new Error("Upload succeeded but no image URL was returned");
+      }
+      setCoverUrl(nextUrl);
+      // Edit mode: persist cover immediately so Cloudinary URL is never lost if user navigates away.
+      if (mode === "edit" && initial) {
+        await updateAdminBlog(initial.id, { cover_image_url: nextUrl });
+        setNote("Cover image uploaded and saved.");
+      } else {
+        setNote("Cover image ready — click Save Post to keep it on this blog.");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
@@ -310,10 +320,10 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
             <div className="col-span-2 flex gap-2">
               <button
                 type="submit"
-                disabled={saving}
+                disabled={saving || uploading}
                 className="lrp-btn lrp-btn-primary min-h-11 flex-1 cursor-pointer disabled:opacity-60"
               >
-                {saving ? "Saving…" : "Save Post"}
+                {saving ? "Saving…" : uploading ? "Uploading…" : "Save Post"}
               </button>
               <Link
                 href="/admin/blogs"
