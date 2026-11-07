@@ -46,7 +46,11 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
   const [publishedOn, setPublishedOn] = useState(initial?.published_on?.slice(0, 10) || todayInput());
   const [readTime, setReadTime] = useState(initial?.read_time || "5 min");
   const [status, setStatus] = useState<"draft" | "published">(
-    initial?.status === "published" ? "published" : "draft",
+    mode === "create"
+      ? "published"
+      : initial?.status === "published"
+        ? "published"
+        : "draft",
   );
   const [related, setRelated] = useState<AdminRelatedLink[]>(initial?.related_links || []);
   const [pickBlogId, setPickBlogId] = useState("");
@@ -132,16 +136,17 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
     };
     try {
       if (mode === "create") {
-        const created = await createAdminBlog(payload);
-        setNote("Blog post saved.");
-        router.replace(`/admin/blogs/${created.id}`);
-      } else if (initial) {
+        await createAdminBlog(payload);
+        router.replace("/admin/blogs?saved=1");
+        return;
+      }
+      if (initial) {
         await updateAdminBlog(initial.id, payload);
-        setNote("Blog post updated.");
+        router.replace("/admin/blogs?saved=1");
+        return;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
-    } finally {
       setSaving(false);
     }
   }
@@ -281,8 +286,8 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
                 onChange={(e) => setStatus(e.target.value as "draft" | "published")}
                 className="lrp-input admin-filter-field"
               >
-                <option value="draft">Draft</option>
                 <option value="published">Published</option>
+                <option value="draft">Draft</option>
               </select>
             </label>
             <div className="col-span-2 flex gap-2">

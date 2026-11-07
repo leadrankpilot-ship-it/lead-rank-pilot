@@ -1,15 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { AdminBlog, deleteAdminBlog, fetchAdminBlogs } from "@/lib/admin-api";
 import { SkeletonBones } from "@/components/ui";
 
-export default function AdminBlogsPage() {
+function AdminBlogsPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [blogs, setBlogs] = useState<AdminBlog[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [showSaved, setShowSaved] = useState(false);
 
   const refresh = useCallback(async () => {
     setBlogs(await fetchAdminBlogs());
@@ -20,6 +24,12 @@ export default function AdminBlogsPage() {
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load blogs"))
       .finally(() => setLoading(false));
   }, [refresh]);
+
+  useEffect(() => {
+    if (searchParams.get("saved") !== "1") return;
+    setShowSaved(true);
+    router.replace("/admin/blogs", { scroll: false });
+  }, [searchParams, router]);
 
   async function onDelete(id: number) {
     if (!window.confirm("Delete this blog post?")) return;
@@ -126,6 +136,41 @@ export default function AdminBlogsPage() {
           </div>
         )}
       </section>
+
+      {showSaved ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal>
+          <div className="w-full max-w-sm rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center shadow-xl">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#ECFDF5] text-[#059669]">
+              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p className="text-lg font-semibold text-[#111827]">Blog saved</p>
+            <p className="mt-1 text-sm text-[#6B7280]">Your post is on the list below.</p>
+            <button
+              type="button"
+              className="lrp-btn lrp-btn-primary mt-5 w-full cursor-pointer"
+              onClick={() => setShowSaved(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
+  );
+}
+
+export default function AdminBlogsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="lrp-card">
+          <SkeletonBones rows={4} />
+        </div>
+      }
+    >
+      <AdminBlogsPageInner />
+    </Suspense>
   );
 }
