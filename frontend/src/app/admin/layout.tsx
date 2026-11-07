@@ -1,13 +1,10 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
-import { AdminShell } from "@/components/AdminShell";
+import { Suspense, type ReactNode } from "react";
+import { AdminLayoutClient } from "./AdminLayoutClient";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  if (pathname === "/admin/login") {
-    return children;
-  }
-  return <AdminShell>{children}</AdminShell>;
+  return (
+    <Suspense fallback={<div className="smx-layout min-h-screen bg-[#f4f5f5]" />}>
+      <AdminLayoutClient>{children}</AdminLayoutClient>
+    </Suspense>
+  );
 }
