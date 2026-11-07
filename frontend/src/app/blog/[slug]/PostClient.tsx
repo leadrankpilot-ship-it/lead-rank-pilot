@@ -61,23 +61,41 @@ export function PostClient() {
 
             {post.related_links?.length ? (
               <section className="mt-12 border-t border-[#E5E7EB] pt-8">
-                <h2 className="text-sm font-bold uppercase tracking-[0.06em] text-[#6B7280]">
-                  Related posts / links
+                <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#9CA3AF]">
+                  Related reading
                 </h2>
-                <ul className="mt-4 space-y-2">
-                  {post.related_links.map((link, idx) => (
-                    <li key={`${link.url}-${idx}`}>
-                      <a
-                        href={link.url}
-                        className="text-sm font-semibold text-[#7C3AED] hover:underline"
-                        {...(link.url.startsWith("http")
-                          ? { target: "_blank", rel: "noreferrer" }
-                          : {})}
-                      >
-                        {link.title}
-                      </a>
-                    </li>
-                  ))}
+                <ul className="mt-4 space-y-3">
+                  {post.related_links.map((link, idx) => {
+                    const external = /^https?:\/\//i.test(link.url);
+                    const internal =
+                      Boolean(link.related_post_id) || link.url.startsWith("/blog/");
+                    const cardClass =
+                      "flex items-center justify-between gap-4 rounded-2xl border border-[#2A2A2A] bg-[#141414] px-5 py-4 transition hover:border-[#3F3F3F] hover:bg-[#1A1A1A]";
+                    const body = (
+                      <>
+                        <div className="min-w-0 text-left">
+                          <p className="text-[15px] font-semibold leading-snug text-white">{link.title}</p>
+                          <p className="mt-1 text-xs text-[#9CA3AF]">
+                            {internal ? "Internal article" : external ? "External link" : "Related link"}
+                          </p>
+                        </div>
+                        <span className="shrink-0 text-sm font-semibold text-sm-orange">Read →</span>
+                      </>
+                    );
+                    return (
+                      <li key={`${link.url}-${idx}`}>
+                        {external ? (
+                          <a href={link.url} target="_blank" rel="noreferrer" className={cardClass}>
+                            {body}
+                          </a>
+                        ) : (
+                          <Link href={link.url} className={cardClass}>
+                            {body}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
             ) : null}
