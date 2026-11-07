@@ -1,11 +1,10 @@
-# Settings → Root Directory = backend
-# Networking → domain port = 8080
+# REQUIRED in Railway UI:
+# - Root Directory: backend
+# - Networking public domain port: 8080
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "echo STARTING_PORT=$PORT; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} --log-level info"
+startCommand = "./start.sh"
 restartPolicyType = "ON_FAILURE"
-healthcheckPath = "/api/health"
-healthcheckTimeout = 100

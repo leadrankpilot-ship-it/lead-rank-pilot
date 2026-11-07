@@ -30,6 +30,7 @@ from app.services.plans import ensure_plan_catalog
 
 setup_logging()
 logger = logging.getLogger(__name__)
+logger.info("main module loaded; cors=%s", settings.cors_origin_list)
 
 
 def _run_startup_jobs() -> None:

@@ -12,12 +12,11 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --upgrade pip \
-  && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
+RUN chmod +x start.sh
 
 EXPOSE 8080
 
-# Start API immediately. Migrations run in app lifespan (non-blocking for bind).
-CMD ["sh", "-c", "echo STARTING_PORT=${PORT:-8080}; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} --log-level info"]
+CMD ["./start.sh"]

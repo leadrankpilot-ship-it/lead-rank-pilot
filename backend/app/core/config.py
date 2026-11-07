@@ -3,7 +3,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+        # Railway/Docker inject real secrets via env; don't let a missing file break boot.
+        env_ignore_empty=True,
+    )
 
     app_name: str = "LeadRankPilot API"
     api_prefix: str = "/api"
