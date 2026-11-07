@@ -66,8 +66,8 @@ export default function AdminBlogsPage() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="lrp-table min-w-[640px]">
+          <div className="leads-scroll-panel admin-blogs-scroll overflow-auto !max-h-[calc(100vh-220px)]">
+            <table className="lrp-table admin-blogs-table min-w-[640px]">
               <thead>
                 <tr>
                   <th>Title</th>
