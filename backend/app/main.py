@@ -28,6 +28,7 @@ from app.services.admin_seed import ensure_admin_user
 from app.services.db_maintenance import sync_id_sequences
 from app.services.image_upload import uploads_root
 from app.services.plans import ensure_plan_catalog
+from app.services.run_recovery import fail_orphaned_runs
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -35,10 +36,14 @@ logger.info("main module loaded; cors=%s", settings.cors_origin_list)
 
 
 def _run_startup_jobs() -> None:
-    """Seed + sequence repair — do not run alembic on boot (can hang on Railway)."""
+    """Seed + sequence repair + clear scrapes killed by the previous process."""
     db = SessionLocal()
     try:
         sync_id_sequences(db)
+        fail_orphaned_runs(
+            db,
+            reason="Server restarted during this scrape. Please run the search again.",
+        )
         ensure_admin_user(db)
         ensure_plan_catalog(db)
         logger.info("admin/plan seed OK")
@@ -48,12 +53,30 @@ def _run_startup_jobs() -> None:
         db.close()
 
 
+def _run_shutdown_jobs() -> None:
+    """Best-effort: mark in-flight scrapes failed before the process exits."""
+    db = SessionLocal()
+    try:
+        fail_orphaned_runs(
+            db,
+            reason="Server is restarting. Please run the search again.",
+        )
+    except Exception:
+        logger.exception("shutdown recovery skipped/failed")
+    finally:
+        db.close()
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     uploads_root()
-    # Bind/listen first; seed in background.
+    # Bind/listen first; seed/recovery in background.
     asyncio.create_task(asyncio.to_thread(_run_startup_jobs))
-    yield
+    try:
+        yield
+    finally:
+        # Railway sends SIGTERM on deploy — clear stuck UI states for users.
+        await asyncio.to_thread(_run_shutdown_jobs)
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
