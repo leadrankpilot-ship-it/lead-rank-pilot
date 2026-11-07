@@ -36,10 +36,10 @@ def _default_catalog() -> dict[str, Plan]:
             price_usd_month=0.0,
             blog_daily_quota=settings.blog_daily_quota_free,
             search_daily_quota=3,
-            audit_daily_quota=5,
+            audit_daily_quota=0,
             websites_max=3,
             estimated_variable_cost_usd=0.5,
-            description="Try lead search, audits, and limited AI drafts.",
+            description="Try lead search, contact finder, and limited AI drafts.",
         ),
         "starter": Plan(
             id="starter",
@@ -47,7 +47,7 @@ def _default_catalog() -> dict[str, Plan]:
             price_usd_month=29.0,
             blog_daily_quota=settings.blog_daily_quota_starter,
             search_daily_quota=20,
-            audit_daily_quota=30,
+            audit_daily_quota=0,
             websites_max=5,
             estimated_variable_cost_usd=settings.plan_starter_variable_cost_usd,
             stripe_price_id=settings.stripe_price_starter,
@@ -59,7 +59,7 @@ def _default_catalog() -> dict[str, Plan]:
             price_usd_month=79.0,
             blog_daily_quota=settings.blog_daily_quota_pro,
             search_daily_quota=100,
-            audit_daily_quota=100,
+            audit_daily_quota=0,
             websites_max=15,
             estimated_variable_cost_usd=settings.plan_pro_variable_cost_usd,
             stripe_price_id=settings.stripe_price_pro,
@@ -145,7 +145,6 @@ def update_plan(
     price_usd_month: float | None = None,
     blog_daily_quota: int | None = None,
     search_daily_quota: int | None = None,
-    audit_daily_quota: int | None = None,
     websites_max: int | None = None,
     description: str | None = None,
 ) -> Plan:
@@ -162,8 +161,8 @@ def update_plan(
         row.blog_daily_quota = int(blog_daily_quota)
     if search_daily_quota is not None:
         row.search_daily_quota = int(search_daily_quota)
-    if audit_daily_quota is not None:
-        row.audit_daily_quota = int(audit_daily_quota)
+    # Legacy DB column kept at 0 — audit feature removed.
+    row.audit_daily_quota = 0
     if websites_max is not None:
         row.websites_max = int(websites_max)
     if description is not None:

@@ -27,12 +27,12 @@ class Settings(BaseSettings):
 
     log_level: str = "INFO"
 
-    # Website audit / crawl budgets (Phase 3)
+    # Shared HTTP crawl budgets (site profile, contacts, WordPress)
     audit_request_timeout_seconds: float = 12.0
     audit_max_response_bytes: int = 1_500_000
     audit_max_pages: int = 3
     audit_max_links_checked: int = 20
-    audit_user_agent: str = "LeadRankPilotAuditBot/1.0 (+https://leadrankpilot.local)"
+    audit_user_agent: str = "LeadRankPilotBot/1.0 (+https://leadrankpilot.com)"
 
     # Manual website contact scrape (Contact Finder toggle)
     # HTTP-only discovery (~4 pages/site); 50 is OK for background jobs.

@@ -10,7 +10,6 @@ type PlanDraft = {
   description: string;
   search_daily_quota: string;
   blog_daily_quota: string;
-  audit_daily_quota: string;
   websites_max: string;
 };
 
@@ -21,7 +20,6 @@ function toDraft(p: AdminPlan): PlanDraft {
     description: p.description || "",
     search_daily_quota: String(p.search_daily_quota),
     blog_daily_quota: String(p.blog_daily_quota),
-    audit_daily_quota: String(p.audit_daily_quota),
     websites_max: String(p.websites_max),
   };
 }
@@ -64,7 +62,6 @@ export default function AdminPlansPage() {
         description: draft.description,
         search_daily_quota: Number(draft.search_daily_quota),
         blog_daily_quota: Number(draft.blog_daily_quota),
-        audit_daily_quota: Number(draft.audit_daily_quota),
         websites_max: Number(draft.websites_max),
       });
       setPlans((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
@@ -155,17 +152,6 @@ export default function AdminPlansPage() {
                       />
                     </label>
                     <label className="space-y-1">
-                      <span className="text-xs font-semibold text-[#6B7280]">Audits / day</span>
-                      <input
-                        type="number"
-                        min={0}
-                        value={draft.audit_daily_quota}
-                        onChange={(e) => setDraft({ ...draft, audit_daily_quota: e.target.value })}
-                        className="lrp-input w-full"
-                        required
-                      />
-                    </label>
-                    <label className="space-y-1">
                       <span className="text-xs font-semibold text-[#6B7280]">Websites max</span>
                       <input
                         type="number"
@@ -226,9 +212,6 @@ export default function AdminPlansPage() {
                   </li>
                   <li>
                     Blogs / day: <strong>{p.blog_daily_quota}</strong>
-                  </li>
-                  <li>
-                    Audits / day: <strong>{p.audit_daily_quota}</strong>
                   </li>
                   <li>
                     Websites max: <strong>{p.websites_max}</strong>

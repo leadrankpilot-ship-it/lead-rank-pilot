@@ -9,7 +9,6 @@ class PlanOut(BaseModel):
     price_usd_month: float
     blog_daily_quota: int
     search_daily_quota: int
-    audit_daily_quota: int
     websites_max: int
     description: str
     margin_usd: float | None = None
@@ -39,7 +38,6 @@ class SubscriptionOut(BaseModel):
     price_usd_month: float
     blog_daily_quota: int
     search_daily_quota: int
-    audit_daily_quota: int
     websites_max: int
     plan_renews_at: datetime | None = None
     stripe_customer_id: str | None = None

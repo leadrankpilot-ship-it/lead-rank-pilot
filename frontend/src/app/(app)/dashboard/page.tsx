@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SkeletonBones } from "@/components/ui";
 import {
-  AuditReport,
   BlogPost,
   SearchRun,
   Subscription,
@@ -12,7 +11,6 @@ import {
   fetchMe,
   getBlogQuota,
   getSubscription,
-  listAudits,
   listBlogPosts,
   listSearches,
   listWebsites,
@@ -53,19 +51,17 @@ export default function DashboardPage() {
   const [websites, setWebsites] = useState<Website[]>([]);
   const [searches, setSearches] = useState<SearchRun[]>([]);
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [audits, setAudits] = useState<AuditReport[]>([]);
   const [blogQuota, setBlogQuota] = useState<BlogQuota>({ used: 0, limit: 0, remaining: 0 });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    const [me, subscription, sites, runs, blogPosts, auditRows, quota] = await Promise.all([
+    const [me, subscription, sites, runs, blogPosts, quota] = await Promise.all([
       fetchMe().catch(() => null),
       getSubscription().catch(() => null),
       listWebsites().catch(() => [] as Website[]),
       listSearches().catch(() => [] as SearchRun[]),
       listBlogPosts().catch(() => [] as BlogPost[]),
-      listAudits().catch(() => [] as AuditReport[]),
       getBlogQuota().catch(() => ({ used: 0, limit: 0, remaining: 0 })),
     ]);
     setEmail(me?.email || "");
@@ -73,7 +69,6 @@ export default function DashboardPage() {
     setWebsites(sites);
     setSearches(runs);
     setPosts(blogPosts);
-    setAudits(auditRows);
     setBlogQuota(quota);
   }, []);
 
@@ -102,13 +97,12 @@ export default function DashboardPage() {
       published,
       drafts,
       totalPosts: posts.length,
-      audits: audits.length,
       sitesMax: sub?.websites_max ?? 1,
       confirmedSites,
       searchQuota: sub?.search_daily_quota ?? 0,
-      auditQuota: sub?.audit_daily_quota ?? 0,
+      blogDaily: sub?.blog_daily_quota ?? 0,
     };
-  }, [searches, posts, audits, websites, sub]);
+  }, [searches, posts, websites, sub]);
 
   if (loading) {
     return (
@@ -117,7 +111,7 @@ export default function DashboardPage() {
           <SkeletonBones rows={3} />
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {[0, 1, 2, 3, 4, 5].map((i) => (
+          {[0, 1, 2, 3, 4].map((i) => (
             <div key={i} className="lrp-card !p-4">
               <SkeletonBones rows={2} />
             </div>
@@ -172,16 +166,10 @@ export default function DashboardPage() {
       hint: stats.published ? "Live on your connected sites" : "Approve & publish from AI blogs",
       href: "/blogs",
     },
-    {
-      label: "Site audits",
-      value: stats.audits,
-      hint: stats.auditQuota > 0 ? `${stats.auditQuota}/day included on your plan` : "SEO health checks",
-      href: "/audits",
-    },
   ];
 
   return (
-    <div className="space-y-6 pt-2">
+    <div className="pt-2">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-[#111827]">
@@ -200,12 +188,12 @@ export default function DashboardPage() {
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#D63A2F]">
+        <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#D63A2F]">
           {error}
         </div>
       ) : null}
 
-      <section className="lrp-card !p-5">
+      <section className="lrp-card mt-6 !p-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#6B7280]">
@@ -237,13 +225,13 @@ export default function DashboardPage() {
               <p className="mt-2 text-sm font-semibold text-[#111827]">
                 {stats.searchQuota} searches
               </p>
-              <p className="text-xs text-[#9CA3AF]">{stats.auditQuota} audits / day</p>
+              <p className="text-xs text-[#9CA3AF]">{stats.blogDaily} blogs / day</p>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {cards.map((m) => (
           <Link key={m.label} href={m.href} className="lrp-card lrp-card-interactive !p-4 !py-5 block">
             <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#6B7280]">{m.label}</p>

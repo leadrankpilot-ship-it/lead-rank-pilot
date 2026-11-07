@@ -24,6 +24,4 @@ class User(Base):
     websites = relationship("Website", back_populates="owner", cascade="all, delete-orphan")
     jobs = relationship("Job", back_populates="owner", cascade="all, delete-orphan")
     search_runs = relationship("SearchRun", back_populates="owner", cascade="all, delete-orphan")
-    audit_reports = relationship("AuditReport", back_populates="owner", cascade="all, delete-orphan")
-    saved_searches = relationship("SavedSearch", back_populates="owner", cascade="all, delete-orphan")
     usage_entries = relationship("UsageLedger", back_populates="owner", cascade="all, delete-orphan")

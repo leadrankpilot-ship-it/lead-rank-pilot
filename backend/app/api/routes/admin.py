@@ -171,7 +171,6 @@ def _plan_out(p) -> AdminPlanOut:
         price_usd_month=p.price_usd_month,
         blog_daily_quota=p.blog_daily_quota,
         search_daily_quota=p.search_daily_quota,
-        audit_daily_quota=p.audit_daily_quota,
         websites_max=p.websites_max,
         description=p.description,
     )
@@ -204,7 +203,6 @@ def admin_update_plan(
             price_usd_month=body.price_usd_month,
             blog_daily_quota=body.blog_daily_quota,
             search_daily_quota=body.search_daily_quota,
-            audit_daily_quota=body.audit_daily_quota,
             websites_max=body.websites_max,
             description=body.description,
         )

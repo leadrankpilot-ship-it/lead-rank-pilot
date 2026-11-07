@@ -8,7 +8,6 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import (
     admin,
-    audits,
     auth,
     billing,
     blogs,
@@ -17,7 +16,6 @@ from app.api.routes import (
     jobs,
     leads,
     reference_custom,
-    saved_searches,
     searches,
     websites,
 )
@@ -96,8 +94,6 @@ app.include_router(websites.router, prefix=settings.api_prefix)
 app.include_router(jobs.router, prefix=settings.api_prefix)
 app.include_router(searches.router, prefix=settings.api_prefix)
 app.include_router(leads.router, prefix=settings.api_prefix)
-app.include_router(audits.router, prefix=settings.api_prefix)
-app.include_router(saved_searches.router, prefix=settings.api_prefix)
 app.include_router(blogs.router, prefix=settings.api_prefix)
 app.include_router(connections.router, prefix=settings.api_prefix)
 app.include_router(billing.router, prefix=settings.api_prefix)

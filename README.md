@@ -54,9 +54,9 @@ Copy `frontend/.env.local.example` → `frontend/.env.local` if needed (`NEXT_PU
 - `GET/POST /api/connections` · wordpress | custom | export · test/revoke
 - `GET/POST /api/billing/*` · plans · subscription · checkout · mock-activate · webhook
 - `POST /api/reference/custom-publish` · local custom-contract test receiver
-- Lead search/qualify/audit endpoints from earlier phases
+- Lead search/qualify and contact finder endpoints
 
-Frontend: `/`, `/pricing`, `/billing`, `/login`, `/register`, `/dashboard`, `/leads`, `/audits`, `/blogs`
+Frontend: `/`, `/pricing`, `/billing`, `/login`, `/register`, `/dashboard`, `/leads`, `/contacts`, `/blogs`
 
 Docs: `docs/custom-publish-contract.md` · `docs/ops-launch.md`
 

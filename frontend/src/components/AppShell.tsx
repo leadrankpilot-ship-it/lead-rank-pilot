@@ -103,17 +103,6 @@ function metaFor(pathname: string) {
       hideReportHead: true,
     };
   }
-  if (pathname.startsWith("/audits")) {
-    return {
-      suite: "SEO",
-      title: "Site audits",
-      reportTitle: "Site Audit Overview",
-      crumbs: ["Home", "SEO", "Site audits"],
-      filters: ["Desktop", "Worldwide", "USD"],
-      hideSubAndFilters: false,
-      hideReportHead: false,
-    };
-  }
   if (pathname.startsWith("/blogs")) {
     return {
       suite: "Content",

@@ -72,7 +72,6 @@ export type AdminPlan = {
   price_usd_month: number;
   blog_daily_quota: number;
   search_daily_quota: number;
-  audit_daily_quota: number;
   websites_max: number;
   description: string;
 };

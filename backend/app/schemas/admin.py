@@ -44,7 +44,6 @@ class AdminPlanOut(BaseModel):
     price_usd_month: float
     blog_daily_quota: int
     search_daily_quota: int
-    audit_daily_quota: int
     websites_max: int
     description: str = ""
 
@@ -54,6 +53,5 @@ class AdminPlanUpdate(BaseModel):
     price_usd_month: float | None = Field(default=None, ge=0)
     blog_daily_quota: int | None = Field(default=None, ge=0)
     search_daily_quota: int | None = Field(default=None, ge=0)
-    audit_daily_quota: int | None = Field(default=None, ge=0)
     websites_max: int | None = Field(default=None, ge=1)
     description: str | None = Field(default=None, max_length=2000)

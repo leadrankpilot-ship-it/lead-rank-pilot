@@ -17,8 +17,6 @@ _SERIAL_TABLES = (
     "jobs",
     "search_runs",
     "leads",
-    "audit_reports",
-    "saved_searches",
     "blog_topics",
     "blog_posts",
     "usage_ledger",

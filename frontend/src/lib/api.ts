@@ -103,7 +103,6 @@ export type Plan = {
   price_usd_month: number;
   blog_daily_quota: number;
   search_daily_quota: number;
-  audit_daily_quota: number;
   websites_max: number;
   description: string;
   margin_usd?: number | null;
@@ -117,7 +116,6 @@ export type Subscription = {
   price_usd_month: number;
   blog_daily_quota: number;
   search_daily_quota: number;
-  audit_daily_quota: number;
   websites_max: number;
   plan_renews_at: string | null;
   stripe_customer_id: string | null;
@@ -701,61 +699,4 @@ export async function downloadSearchCsv(searchId: number, filters: LeadFilters =
   a.download = `leads_search_${searchId}.csv`;
   a.click();
   URL.revokeObjectURL(url);
-}
-
-export type AuditReport = {
-  id: number;
-  website_id: number | null;
-  lead_id: number | null;
-  target_url: string;
-  status_category: string;
-  checks: Record<string, unknown>;
-  score: { score?: number; reasons?: string[] } | null;
-  limitations: string[] | null;
-  checked_at: string | null;
-  created_at: string | null;
-};
-
-export async function listAudits(): Promise<AuditReport[]> {
-  return apiFetch("/api/audits");
-}
-
-export async function createAudit(url: string): Promise<AuditReport> {
-  return apiFetch("/api/audits", {
-    method: "POST",
-    body: JSON.stringify({ url }),
-  });
-}
-
-export type SavedSearch = {
-  id: number;
-  name: string;
-  filters_json: string;
-  schedule: string;
-  enabled: boolean;
-  last_run_at: string | null;
-  created_at: string | null;
-};
-
-export async function listSavedSearches(): Promise<SavedSearch[]> {
-  return apiFetch("/api/saved-searches");
-}
-
-export async function createSavedSearch(input: {
-  name: string;
-  business_type: string;
-  location: string;
-}): Promise<SavedSearch> {
-  return apiFetch("/api/saved-searches", {
-    method: "POST",
-    body: JSON.stringify({ ...input, schedule: "manual", enabled: true }),
-  });
-}
-
-export async function disableSavedSearch(id: number): Promise<SavedSearch> {
-  return apiFetch(`/api/saved-searches/${id}/disable`, { method: "PATCH" });
-}
-
-export async function recheckSavedSearch(id: number): Promise<SearchRun> {
-  return apiFetch(`/api/saved-searches/${id}/recheck`, { method: "POST" });
 }

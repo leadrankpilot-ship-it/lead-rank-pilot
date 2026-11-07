@@ -74,7 +74,6 @@ export default function PricingPage() {
               <ul className="mt-5 space-y-1 text-sm text-sm-ink">
                 <li>{p.blog_daily_quota} AI drafts / day</li>
                 <li>{p.search_daily_quota} searches / day</li>
-                <li>{p.audit_daily_quota} audits / day</li>
                 <li>Up to {p.websites_max} sites</li>
               </ul>
               <button
