@@ -26,11 +26,18 @@ export default function BlogIndexPage() {
           Product updates, lead-gen playbooks, and publishing tips from LeadRankPilot.
         </p>
 
-        {error ? <p className="mt-4 text-sm text-sm-danger">{error}</p> : null}
+        {error ? (
+          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#D63A2F]">
+            {error}
+            <p className="mt-1 text-xs text-[#9CA3AF]">
+              Usually means the API is still deploying or temporarily unavailable—not that posts are missing.
+            </p>
+          </div>
+        ) : null}
 
         {loading ? (
           <p className="mt-10 text-sm text-sm-muted">Loading posts…</p>
-        ) : posts.length === 0 ? (
+        ) : error ? null : posts.length === 0 ? (
           <div className="mt-10 rounded-xl border border-dashed border-[#E5E7EB] bg-white px-6 py-12 text-center">
             <p className="text-sm text-sm-muted">No published posts yet. Check back soon.</p>
           </div>

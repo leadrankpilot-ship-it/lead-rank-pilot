@@ -58,13 +58,18 @@ def _serialize(row: PlatformBlog) -> AdminBlogOut:
 
 @router.get("", response_model=list[AdminBlogOut])
 def list_published_blogs(db: Session = Depends(get_db)) -> list[AdminBlogOut]:
-    rows = (
-        db.query(PlatformBlog)
-        .filter(PlatformBlog.status == "published")
-        .order_by(PlatformBlog.published_on.desc().nullslast(), PlatformBlog.id.desc())
-        .limit(100)
-        .all()
-    )
+    try:
+        rows = (
+            db.query(PlatformBlog)
+            .filter(PlatformBlog.status == "published")
+            .order_by(PlatformBlog.published_on.desc(), PlatformBlog.id.desc())
+            .limit(100)
+            .all()
+        )
+    except Exception:
+        # Table may not exist yet during a rolling deploy — avoid hard 500/502 for empty blog UI.
+        db.rollback()
+        return []
     return [_serialize(r) for r in rows]
 
 

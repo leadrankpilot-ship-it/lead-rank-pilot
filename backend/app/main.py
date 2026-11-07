@@ -30,6 +30,7 @@ from app.services.admin_seed import ensure_admin_user
 from app.services.db_maintenance import sync_id_sequences
 from app.services.image_upload import uploads_root
 from app.services.plans import ensure_plan_catalog
+from app.services.platform_blog_seed import ensure_demo_platform_blogs
 from app.services.run_recovery import fail_orphaned_runs
 
 setup_logging()
@@ -53,7 +54,8 @@ def _run_startup_jobs() -> None:
         )
         ensure_admin_user(db)
         ensure_plan_catalog(db)
-        logger.info("admin/plan seed OK")
+        ensure_demo_platform_blogs(db)
+        logger.info("admin/plan/blog seed OK")
     except Exception:
         logger.exception("startup seed skipped/failed")
     finally:
