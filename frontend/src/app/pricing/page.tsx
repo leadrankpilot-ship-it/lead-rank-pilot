@@ -37,28 +37,34 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-full flex-1 bg-sm-canvas text-sm-ink">
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-sm-orange text-sm font-bold text-white">
+      <header className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-6">
+        <Link href="/" className="flex min-w-0 items-center gap-2.5">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-sm-orange text-sm font-bold text-white">
             L
           </span>
-          <span className="text-sm font-semibold tracking-tight">LeadRankPilot</span>
+          <span className="truncate text-sm font-semibold tracking-tight">LeadRankPilot</span>
         </Link>
-        <Link href="/billing" className="text-sm font-semibold text-sm-orange hover:underline">
-          Account billing
-        </Link>
+        <div className="flex shrink-0 items-center gap-3">
+          <Link href="/login" className="text-sm font-semibold text-sm-muted hover:text-sm-ink sm:hidden">
+            Sign in
+          </Link>
+          <Link href="/billing" className="text-sm font-semibold text-sm-orange hover:underline">
+            <span className="sm:hidden">Billing</span>
+            <span className="hidden sm:inline">Account billing</span>
+          </Link>
+        </div>
       </header>
-      <main className="mx-auto w-full max-w-5xl px-6 pb-20">
-        <h1 className="text-3xl font-semibold tracking-tight">Plans</h1>
-        <p className="mt-2 max-w-xl text-sm-muted">
+      <main className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-20">
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Plans</h1>
+        <p className="mt-2 max-w-xl text-sm text-sm-muted sm:text-[15px]">
           Usage caps scale with your plan. Paid tiers keep healthy margins after AI and crawl costs.
         </p>
         {error ? <p className="mt-4 text-sm text-sm-danger">{error}</p> : null}
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:gap-6 md:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.id}
-              className={`lrp-card flex flex-col ${
+              className={`lrp-card flex flex-col !p-5 sm:!p-6 ${
                 p.id === "starter" ? "border-sm-orange ring-1 ring-sm-orange" : ""
               }`}
             >
@@ -80,7 +86,7 @@ export default function PricingPage() {
                 type="button"
                 disabled={busy === p.id}
                 onClick={() => onSelect(p.id)}
-                className={`mt-6 w-full lrp-btn ${
+                className={`mt-6 w-full lrp-btn min-h-11 ${
                   p.id === "starter" ? "lrp-btn-primary" : "lrp-btn-secondary"
                 }`}
               >

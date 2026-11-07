@@ -53,16 +53,16 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <h1 className="smx-report-title !m-0">Users</h1>
-        <form onSubmit={onSearch} className="flex gap-2">
+        <form onSubmit={onSearch} className="flex w-full gap-2 sm:w-auto">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search email"
-            className="lrp-input min-w-[220px]"
+            className="lrp-input min-w-0 flex-1 sm:w-[220px] sm:flex-none"
           />
-          <button type="submit" className="lrp-btn lrp-btn-secondary cursor-pointer">
+          <button type="submit" className="lrp-btn lrp-btn-secondary shrink-0 cursor-pointer">
             Search
           </button>
         </form>
@@ -82,8 +82,8 @@ export default function AdminUsersPage() {
         ) : users.length === 0 ? (
           <p className="px-5 py-8 text-sm text-[#9CA3AF]">No users found.</p>
         ) : (
-          <div className="leads-scroll-panel overflow-x-auto !max-h-[calc(100vh-220px)]">
-            <table className="lrp-table min-w-[860px]">
+          <div className="leads-scroll-panel -mx-0 overflow-x-auto !max-h-[calc(100vh-220px)]">
+            <table className="lrp-table min-w-[720px] sm:min-w-[860px]">
               <thead>
                 <tr>
                   <th>ID</th>

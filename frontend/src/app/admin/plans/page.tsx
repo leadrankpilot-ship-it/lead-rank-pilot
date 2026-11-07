@@ -84,7 +84,7 @@ export default function AdminPlansPage() {
       ) : null}
 
       {loading ? (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[0, 1, 2].map((i) => (
             <div key={i} className="lrp-card">
               <SkeletonBones rows={4} />
@@ -92,7 +92,7 @@ export default function AdminPlansPage() {
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {plans.map((p) => {
             const isEditing = editingId === p.id && draft;
             if (isEditing) {

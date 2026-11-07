@@ -92,14 +92,17 @@ export function AdminShell({ children }: { children: ReactNode }) {
             </svg>
           </button>
 
-          <Link href="/admin" className="smx-snav__brand">
+          <Link href="/admin" className="smx-snav__brand min-w-0">
             <span className="smx-snav__logo">L</span>
-            <span className="smx-snav__name">LeadRankPilot Admin</span>
+            <span className="smx-snav__name">
+              <span className="sm:hidden">Admin</span>
+              <span className="hidden sm:inline">LeadRankPilot Admin</span>
+            </span>
           </Link>
           <nav className="smx-snav__links">
             <button
               type="button"
-              className="cursor-pointer rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-[#D63A2F] transition hover:bg-red-100"
+              className="cursor-pointer rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-semibold text-[#D63A2F] transition hover:bg-red-100 sm:px-3"
               onClick={logout}
             >
               Log out

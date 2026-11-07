@@ -1473,11 +1473,37 @@ select.admin-filter-field {
     padding: 14px 16px;
   }
   .smx-report-page {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding: 16px 16px 40px;
   }
   .smx-report-title {
     font-size: 20px;
+  }
+  .smx-snav__wrapper {
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .smx-snav__name {
+    max-width: 42vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .lrp-card {
+    padding: 16px;
+    border-radius: 10px;
+  }
+  .lrp-input {
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .lrp-btn {
+    min-height: 44px;
+  }
+  .smx-report-page {
+    padding: 12px 12px 32px;
   }
 }
 

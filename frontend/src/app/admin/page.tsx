@@ -107,13 +107,13 @@ export default function AdminOverviewPage() {
     <div className="flex flex-col gap-5">
       <h1 className="smx-report-title !m-0">Overview</h1>
 
-      <div className="lrp-card flex flex-wrap items-end gap-3 !px-5 !py-4">
-        <label className="space-y-1 text-xs font-semibold text-[#6B7280]">
+      <div className="lrp-card grid grid-cols-1 items-end gap-3 !px-4 !py-4 sm:grid-cols-2 sm:!px-5 lg:flex lg:flex-wrap">
+        <label className="block min-w-0 space-y-1 text-xs font-semibold text-[#6B7280]">
           Year
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
-            className={`${selectClass} min-w-[120px]`}
+            className={`${selectClass} w-full min-w-0 lg:min-w-[120px]`}
           >
             {years.map((o) => (
               <option key={o.value || "all-y"} value={o.value}>
@@ -123,12 +123,12 @@ export default function AdminOverviewPage() {
           </select>
         </label>
 
-        <label className="space-y-1 text-xs font-semibold text-[#6B7280]">
+        <label className="block min-w-0 space-y-1 text-xs font-semibold text-[#6B7280]">
           Month
           <select
             value={month}
             onChange={(e) => setMonth(e.target.value)}
-            className={`${selectClass} min-w-[140px]`}
+            className={`${selectClass} w-full min-w-0 lg:min-w-[140px]`}
           >
             {MONTHS.map((o) => (
               <option key={o.value || "all-m"} value={o.value}>
@@ -138,22 +138,22 @@ export default function AdminOverviewPage() {
           </select>
         </label>
 
-        <label className="space-y-1 text-xs font-semibold text-[#6B7280]">
+        <label className="block min-w-0 space-y-1 text-xs font-semibold text-[#6B7280]">
           Date
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="lrp-input mt-1 min-w-[160px] cursor-pointer !py-2.5 !pl-4 !pr-3 text-sm"
+            className="lrp-input mt-1 w-full min-w-0 cursor-pointer !py-2.5 !pl-4 !pr-3 text-sm lg:min-w-[160px]"
           />
         </label>
 
-        <label className="space-y-1 text-xs font-semibold text-[#6B7280]">
+        <label className="block min-w-0 space-y-1 text-xs font-semibold text-[#6B7280]">
           Day
           <select
             value={weekday}
             onChange={(e) => setWeekday(e.target.value)}
-            className={`${selectClass} min-w-[140px]`}
+            className={`${selectClass} w-full min-w-0 lg:min-w-[140px]`}
           >
             {WEEKDAYS.map((o) => (
               <option key={o.value || "all-d"} value={o.value}>
@@ -167,7 +167,7 @@ export default function AdminOverviewPage() {
           type="button"
           disabled={!hasFilters}
           onClick={clearFilters}
-          className="lrp-btn lrp-btn-secondary cursor-pointer !px-4 disabled:cursor-not-allowed disabled:opacity-40"
+          className="lrp-btn lrp-btn-secondary w-full cursor-pointer !px-4 disabled:cursor-not-allowed disabled:opacity-40 sm:col-span-2 lg:w-auto"
         >
           Clear filters
         </button>
@@ -180,7 +180,7 @@ export default function AdminOverviewPage() {
       ) : null}
 
       {loading && !stats ? (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {[0, 1, 2].map((i) => (
             <div key={i} className="lrp-card !p-4">
               <SkeletonBones rows={2} />
@@ -188,7 +188,7 @@ export default function AdminOverviewPage() {
           ))}
         </div>
       ) : (
-        <div className={`grid grid-cols-3 gap-3${loading ? " opacity-60" : ""}`}>
+        <div className={`grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3${loading ? " opacity-60" : ""}`}>
           {[
             {
               label: "Total revenue",

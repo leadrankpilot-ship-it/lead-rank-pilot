@@ -33,20 +33,20 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen flex-1 items-center justify-center overflow-hidden px-6 py-16">
+    <main className="relative flex min-h-screen flex-1 items-center justify-center overflow-hidden px-4 py-10 sm:px-6 sm:py-16">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgba(193,144,255,0.18),transparent_50%),linear-gradient(180deg,#f8f9fb,#f2f3f7)]"
       />
       <div className="relative w-full max-w-md lrp-fade-up">
-        <div className="mb-8 flex items-center gap-2.5">
+        <div className="mb-6 flex items-center gap-2.5 sm:mb-8">
           <span className="smx-snav__logo">L</span>
           <div>
             <p className="text-sm font-semibold tracking-tight">LeadRankPilot</p>
             <p className="text-xs text-[#6B7280]">Admin panel</p>
           </div>
         </div>
-        <div className="lrp-card !p-7">
+        <div className="lrp-card !p-5 sm:!p-7">
           <h1 className="text-xl font-bold text-[#111827]">Admin sign in</h1>
           <form onSubmit={onSubmit} className="mt-7 space-y-4">
             <label className="block space-y-1.5 text-sm">
@@ -98,7 +98,7 @@ export default function AdminLoginPage() {
                 {error}
               </div>
             ) : null}
-            <button type="submit" disabled={loading} className="lrp-btn lrp-btn-primary w-full cursor-pointer">
+            <button type="submit" disabled={loading} className="lrp-btn lrp-btn-primary min-h-11 w-full cursor-pointer">
               {loading ? "Signing in…" : "Sign in"}
             </button>
           </form>

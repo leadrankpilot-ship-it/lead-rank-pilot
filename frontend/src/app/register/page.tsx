@@ -28,13 +28,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="relative flex min-h-full flex-1 items-center justify-center overflow-hidden px-6 py-16">
+    <main className="relative flex min-h-full flex-1 items-center justify-center overflow-hidden px-4 py-10 sm:px-6 sm:py-16">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,rgba(255,98,47,0.14),transparent_50%),linear-gradient(180deg,#f8f9fb,#f2f3f7)]"
       />
       <div className="relative w-full max-w-md lrp-fade-up">
-        <div className="mb-8 flex items-center gap-2.5">
+        <div className="mb-6 flex items-center gap-2.5 sm:mb-8">
           <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--bg-primary)] text-sm font-bold text-white shadow-[0_10px_30px_rgba(255,98,47,0.35)]">
             L
           </span>
@@ -43,7 +43,7 @@ export default function RegisterPage() {
             <p className="text-xs text-[var(--text-secondary)]">Start free in seconds</p>
           </div>
         </div>
-        <div className="lrp-card !p-7">
+        <div className="lrp-card !p-5 sm:!p-7">
           <h1 className="ig-h2">Create account</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             Already registered?{" "}
@@ -74,7 +74,7 @@ export default function RegisterPage() {
               />
             </label>
             {error ? <p className="text-sm text-[var(--text-danger)]">{error}</p> : null}
-            <button type="submit" disabled={loading} className="lrp-btn lrp-btn-primary w-full">
+            <button type="submit" disabled={loading} className="lrp-btn lrp-btn-primary min-h-11 w-full">
               {loading ? "Creating…" : "Create account"}
             </button>
           </form>
