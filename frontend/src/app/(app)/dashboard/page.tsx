@@ -175,9 +175,6 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-semibold tracking-tight text-[#111827]">
             Welcome back, {firstName}
           </h1>
-          <p className="mt-1 text-sm text-[#6B7280]">
-            Your workspace at a glance — plan, usage, and results.
-          </p>
         </div>
         <Link
           href="/billing"
