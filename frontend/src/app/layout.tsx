@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "LeadRankPilot",
-  description: "Business lead finder and AI blog automation",
+  description:
+    "Source local leads, generate AI blog drafts, and publish to WordPress or your own endpoint—from one workspace.",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: "/favicon.svg",

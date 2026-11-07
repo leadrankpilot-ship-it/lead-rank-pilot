@@ -1,21 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { fetchApiHealth } from "@/lib/api";
-
-async function BackendStatus() {
-  let online = false;
-  try {
-    const health = await fetchApiHealth();
-    online = health.status === "ok";
-  } catch {
-    online = false;
-  }
-  return (
-    <p className="text-xs tracking-wide text-[var(--text-nav-muted)]">
-      {online ? "System online" : "System offline"}
-    </p>
-  );
-}
 
 export default function Home() {
   return (
@@ -54,7 +37,7 @@ export default function Home() {
 
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-10">
         <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--orange-400)] sm:mb-4">
-          Lead ops toolkit
+          Lead generation &amp; content ops
         </p>
         <p
           className="mb-5 font-semibold tracking-tight text-white sm:mb-6"
@@ -63,11 +46,11 @@ export default function Home() {
           LeadRankPilot
         </p>
         <h1 className="max-w-2xl text-[clamp(1.15rem,4.2vw,1.75rem)] font-medium leading-snug text-[#d7dae6]">
-          Find local leads. Ship AI blog drafts. Publish with confidence.
+          Source local leads. Generate content. Publish anywhere.
         </h1>
         <p className="mt-4 max-w-xl text-[15px] leading-7 text-[var(--text-nav-muted)] sm:text-base">
-          A Semrush-style workspace for operators — Maps lead search and WordPress or custom
-          publishing in one calm, high-contrast toolkit.
+          Search Maps, capture contacts, draft AI blog posts, and publish to WordPress or your own
+          endpoint—from one secure workspace.
         </p>
         <div className="mt-8 flex w-full max-w-md flex-col gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:flex-wrap">
           <Link
@@ -88,11 +71,6 @@ export default function Home() {
           >
             View pricing
           </Link>
-        </div>
-        <div className="mt-12 sm:mt-16">
-          <Suspense fallback={<p className="text-xs text-[var(--text-nav-muted)]">Checking system…</p>}>
-            <BackendStatus />
-          </Suspense>
         </div>
       </main>
     </div>
