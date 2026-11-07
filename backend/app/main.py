@@ -1,3 +1,5 @@
+import asyncio
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -27,21 +29,36 @@ from app.services.image_upload import uploads_root
 from app.services.plans import ensure_plan_catalog
 
 setup_logging()
+logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(_app: FastAPI):
-    # Schema is managed by Alembic migrations (see backend/alembic)
-    uploads_root()
+def _run_startup_jobs() -> None:
+    """Migrations + seed — must never block the HTTP server bind."""
+    try:
+        from alembic import command
+        from alembic.config import Config
+
+        command.upgrade(Config("alembic.ini"), "head")
+        logger.info("alembic upgrade head OK")
+    except Exception:
+        logger.exception("alembic upgrade skipped/failed")
+
     db = SessionLocal()
     try:
         ensure_admin_user(db)
         ensure_plan_catalog(db)
+        logger.info("admin/plan seed OK")
     except Exception:
-        # Don't block API boot if seed fails (e.g. DB briefly unavailable).
-        pass
+        logger.exception("startup seed skipped/failed")
     finally:
         db.close()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    uploads_root()
+    # Bind/listen first; DB work in background so Railway health checks succeed.
+    asyncio.create_task(asyncio.to_thread(_run_startup_jobs))
     yield
 
 

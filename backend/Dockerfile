@@ -17,8 +17,7 @@ RUN pip install --upgrade pip \
 
 COPY . .
 
-# Do NOT install Playwright browsers in the image (OOM / slow boot on free Railway).
-# Maps scrape can install browsers later on a worker; API must stay light.
 EXPOSE 8080
 
-CMD ["sh", "-c", "echo PORT=$PORT; alembic upgrade head || echo WARN_alembic_failed; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+# Start API immediately. Migrations run in app lifespan (non-blocking for bind).
+CMD ["sh", "-c", "echo STARTING_PORT=${PORT:-8080}; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} --log-level info"]
