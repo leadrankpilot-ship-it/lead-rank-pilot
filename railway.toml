@@ -1,7 +1,5 @@
-# Railway UI:
-# - Root Directory: LEAVE EMPTY (repo root)
-# - Builder: Dockerfile
-# - Public domain port: 8080
+# CRITICAL: In Railway Settings → Deploy → Start Command must be EMPTY.
+# A leftover "alembic upgrade ..." start command causes 502 hang.
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"

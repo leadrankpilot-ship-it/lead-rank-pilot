@@ -34,16 +34,7 @@ logger.info("main module loaded; cors=%s", settings.cors_origin_list)
 
 
 def _run_startup_jobs() -> None:
-    """Migrations + seed — must never block the HTTP server bind."""
-    try:
-        from alembic import command
-        from alembic.config import Config
-
-        command.upgrade(Config("alembic.ini"), "head")
-        logger.info("alembic upgrade head OK")
-    except Exception:
-        logger.exception("alembic upgrade skipped/failed")
-
+    """Seed only — do not run alembic on boot (hangs on some Neon/Railway networks)."""
     db = SessionLocal()
     try:
         ensure_admin_user(db)
@@ -58,7 +49,7 @@ def _run_startup_jobs() -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     uploads_root()
-    # Bind/listen first; DB work in background so Railway health checks succeed.
+    # Bind/listen first; seed in background.
     asyncio.create_task(asyncio.to_thread(_run_startup_jobs))
     yield
 
