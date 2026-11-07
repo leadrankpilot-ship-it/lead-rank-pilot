@@ -70,6 +70,17 @@ const NAV: NavItem[] = [
 ];
 
 function metaFor(pathname: string) {
+  if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+    return {
+      suite: "Home",
+      title: "Dashboard",
+      reportTitle: "Dashboard",
+      crumbs: ["Home", "Dashboard"],
+      filters: [] as string[],
+      hideSubAndFilters: true,
+      hideReportHead: true,
+    };
+  }
   if (pathname.startsWith("/leads")) {
     return {
       suite: "Lead Gen",

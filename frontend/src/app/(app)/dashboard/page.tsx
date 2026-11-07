@@ -125,6 +125,13 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8 pt-2">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-[#111827]">Dashboard</h1>
+        <p className="mt-1 text-sm text-[#6B7280]">
+          Your leads, contacts, sites, and tools in one place.
+        </p>
+      </div>
+
       {error ? (
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#D63A2F]">
           {error}
