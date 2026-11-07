@@ -80,6 +80,13 @@ class Settings(BaseSettings):
     smtp_from_name: str = "LeadRankPilot"
     password_reset_expire_minutes: int = 60
 
+    # Cloudinary (gallery/PC blog cover uploads). Prefer CLOUDINARY_URL or the three fields.
+    cloudinary_url: str = ""
+    cloudinary_cloud_name: str = ""
+    cloudinary_api_key: str = ""
+    cloudinary_api_secret: str = ""
+    cloudinary_folder: str = "leadrankpilot/blogs"
+
     @field_validator("database_url")
     @classmethod
     def normalize_database_url(cls, value: str) -> str:

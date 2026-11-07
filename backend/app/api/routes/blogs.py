@@ -89,13 +89,17 @@ async def upload_blog_image(
         saved = await save_blog_image(file, slug_hint=slug_hint)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
-    base = str(request.base_url).rstrip("/")
+    path = saved["path"]
+    url = saved.get("url") or (
+        path if path.startswith("http") else f"{str(request.base_url).rstrip('/')}{path}"
+    )
     return {
         "filename": saved["filename"],
-        "path": saved["path"],
-        "url": f"{base}{saved['path']}",
+        "path": path,
+        "url": url,
         "original_name": saved["original_name"],
         "content_type": saved["content_type"],
+        "storage": saved.get("storage", "local"),
     }
 
 
