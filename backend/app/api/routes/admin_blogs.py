@@ -10,6 +10,7 @@ from app.db.session import get_db
 from app.models.platform_blog import PlatformBlog
 from app.models.user import User
 from app.schemas.admin import AdminBlogCreate, AdminBlogOut, AdminBlogUpdate, AdminRelatedLink
+from app.services.blog_categories import normalize_blog_category
 from app.services.image_upload import save_blog_image
 
 router = APIRouter(prefix="/admin/blogs", tags=["admin-blogs"])
@@ -74,6 +75,7 @@ def _serialize(row: PlatformBlog) -> AdminBlogOut:
         excerpt=row.excerpt or "",
         body=row.body or "",
         cover_image_url=row.cover_image_url or "",
+        category=normalize_blog_category(getattr(row, "category", None)),
         published_on=row.published_on,
         read_time=row.read_time or "5 min",
         related_links=_parse_links(row.related_links_json),
@@ -137,6 +139,7 @@ def create_admin_blog(
         excerpt=(body.excerpt or "").strip(),
         body=body.body or "",
         cover_image_url=(body.cover_image_url or "").strip(),
+        category=normalize_blog_category(body.category),
         published_on=body.published_on or date.today(),
         read_time=(body.read_time or "5 min").strip() or "5 min",
         related_links_json=_dump_links(body.related_links),
@@ -181,6 +184,8 @@ def update_admin_blog(
         row.body = body.body
     if body.cover_image_url is not None:
         row.cover_image_url = body.cover_image_url.strip()
+    if body.category is not None:
+        row.category = normalize_blog_category(body.category)
     if body.published_on is not None:
         row.published_on = body.published_on
     if body.read_time is not None:

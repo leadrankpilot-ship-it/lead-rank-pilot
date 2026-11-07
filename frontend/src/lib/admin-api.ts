@@ -152,6 +152,7 @@ export type AdminBlog = {
   excerpt: string;
   body: string;
   cover_image_url: string;
+  category: string;
   published_on: string | null;
   read_time: string;
   related_links: AdminRelatedLink[];
@@ -167,6 +168,7 @@ export type AdminBlogPayload = {
   excerpt?: string;
   body?: string;
   cover_image_url?: string;
+  category?: string;
   published_on?: string | null;
   read_time?: string;
   related_links?: AdminRelatedLink[];

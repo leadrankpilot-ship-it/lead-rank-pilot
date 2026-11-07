@@ -714,6 +714,7 @@ export type PlatformBlog = {
   excerpt: string;
   body: string;
   cover_image_url: string;
+  category: string;
   published_on: string | null;
   read_time: string;
   related_links: PlatformBlogLink[];

@@ -63,6 +63,15 @@ class AdminRelatedLink(BaseModel):
     related_post_id: int | None = None
 
 
+BlogCategorySlug = Literal[
+    "lead-generation",
+    "contact-discovery",
+    "ai-blogging",
+    "wordpress-publishing",
+    "growth-tips",
+]
+
+
 class AdminBlogOut(BaseModel):
     id: int
     title: str
@@ -70,6 +79,7 @@ class AdminBlogOut(BaseModel):
     excerpt: str
     body: str
     cover_image_url: str
+    category: str = "growth-tips"
     published_on: date | None = None
     read_time: str
     related_links: list[AdminRelatedLink] = Field(default_factory=list)
@@ -85,6 +95,7 @@ class AdminBlogCreate(BaseModel):
     excerpt: str = Field(default="", max_length=2000)
     body: str = Field(default="")
     cover_image_url: str = Field(default="", max_length=2000)
+    category: BlogCategorySlug = "growth-tips"
     published_on: date | None = None
     read_time: str = Field(default="5 min", max_length=50)
     related_links: list[AdminRelatedLink] = Field(default_factory=list)
@@ -97,6 +108,7 @@ class AdminBlogUpdate(BaseModel):
     excerpt: str | None = Field(default=None, max_length=2000)
     body: str | None = None
     cover_image_url: str | None = Field(default=None, max_length=2000)
+    category: BlogCategorySlug | None = None
     published_on: date | None = None
     read_time: str | None = Field(default=None, max_length=50)
     related_links: list[AdminRelatedLink] | None = None

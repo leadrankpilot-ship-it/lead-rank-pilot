@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { AdminBlog, deleteAdminBlog, fetchAdminBlogs } from "@/lib/admin-api";
+import { blogCategoryLabel } from "@/lib/blog-categories";
 import { SkeletonBones } from "@/components/ui";
 
 function formatBlogDate(value: string | null) {
@@ -93,7 +94,12 @@ function AdminBlogsPageInner() {
             <ul className="admin-blogs-cards">
               {blogs.map((b) => {
                 const dateLabel = formatBlogDate(b.published_on);
-                const meta = [dateLabel, b.read_time || null, b.status].filter(Boolean);
+                const meta = [
+                  dateLabel,
+                  b.read_time || null,
+                  blogCategoryLabel(b.category),
+                  b.status,
+                ].filter(Boolean);
                 return (
                   <li
                     key={b.id}

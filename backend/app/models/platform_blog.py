@@ -17,6 +17,7 @@ class PlatformBlog(Base):
     excerpt: Mapped[str] = mapped_column(Text, nullable=False, default="")
     body: Mapped[str] = mapped_column(Text, nullable=False, default="")
     cover_image_url: Mapped[str] = mapped_column(String(2000), nullable=False, default="")
+    category: Mapped[str] = mapped_column(String(80), nullable=False, default="growth-tips", index=True)
     published_on: Mapped[date | None] = mapped_column(Date, nullable=True)
     read_time: Mapped[str] = mapped_column(String(50), nullable=False, default="5 min")
     related_links_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")

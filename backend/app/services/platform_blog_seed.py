@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from sqlalchemy.orm import Session
 
 from app.models.platform_blog import PlatformBlog
+from app.services.blog_categories import normalize_blog_category
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ _DEMO_POSTS = (
         "title": "How to find local leads with Maps search",
         "excerpt": "A practical playbook for operators who need qualified local businesses—without spending hours on manual Google hunting.",
         "read_time": "6 min",
+        "category": "lead-generation",
         "cover_image_url": "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=1400&q=80",
         "body": """Local lead gen still starts with one question: who nearby actually needs what you sell?
 
@@ -45,6 +47,7 @@ Once your list looks right, move straight into contact discovery to pull emails 
         "title": "From leads to contacts that convert",
         "excerpt": "Finding businesses is only half the job. Here’s how Contact Finder turns listings into outreach-ready emails and phones.",
         "read_time": "5 min",
+        "category": "contact-discovery",
         "cover_image_url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=80",
         "body": """A lead without a way to reach them is just a name on a list.
 
@@ -67,6 +70,7 @@ Lead search finds who to talk to. Contact discovery makes the conversation possi
         "title": "Publish AI blog drafts to WordPress without the chaos",
         "excerpt": "Connect a site, generate drafts that match your brand, then approve and publish—without bouncing between five tools.",
         "read_time": "7 min",
+        "category": "wordpress-publishing",
         "cover_image_url": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1400&q=80",
         "body": """Content ops break when drafting, editing, and publishing live in different places.
 
@@ -87,15 +91,22 @@ If you already run lead campaigns, pairing outreach with fresh site content comp
 
 
 def ensure_demo_platform_blogs(db: Session) -> None:
-    """Insert missing demo posts; refresh cover URLs on existing demo slugs."""
+    """Insert missing demo posts; refresh cover URLs/categories on existing demo slugs."""
     created = 0
     updated = 0
     today = date.today()
     for i, post in enumerate(_DEMO_POSTS):
+        category = normalize_blog_category(post.get("category"))
         exists = db.query(PlatformBlog).filter(PlatformBlog.slug == post["slug"]).first()
         if exists is not None:
+            changed = False
             if (exists.cover_image_url or "") != post["cover_image_url"]:
                 exists.cover_image_url = post["cover_image_url"]
+                changed = True
+            if normalize_blog_category(getattr(exists, "category", None)) != category:
+                exists.category = category
+                changed = True
+            if changed:
                 db.add(exists)
                 updated += 1
             continue
@@ -106,6 +117,7 @@ def ensure_demo_platform_blogs(db: Session) -> None:
                 excerpt=post["excerpt"],
                 body=post["body"],
                 cover_image_url=post["cover_image_url"],
+                category=category,
                 published_on=today - timedelta(days=i * 3),
                 read_time=post["read_time"],
                 related_links_json=json.dumps([]),
@@ -115,4 +127,4 @@ def ensure_demo_platform_blogs(db: Session) -> None:
         created += 1
     if created or updated:
         db.commit()
-        logger.info("demo platform blogs created=%s updated_covers=%s", created, updated)
+        logger.info("demo platform blogs created=%s updated=%s", created, updated)

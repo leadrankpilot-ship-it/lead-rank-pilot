@@ -30,6 +30,7 @@ from app.services.admin_seed import ensure_admin_user
 from app.services.db_maintenance import sync_id_sequences
 from app.services.image_upload import uploads_root
 from app.services.plans import ensure_plan_catalog
+from app.services.platform_blog_schema import ensure_platform_blog_columns
 from app.services.platform_blog_seed import ensure_demo_platform_blogs
 from app.services.run_recovery import fail_orphaned_runs
 
@@ -43,6 +44,7 @@ def _run_startup_jobs() -> None:
     try:
         # Safe if alembic hasn't run yet on a fresh deploy.
         PlatformBlog.__table__.create(bind=engine, checkfirst=True)
+        ensure_platform_blog_columns()
     except Exception:
         logger.exception("platform_blogs table ensure skipped/failed")
     db = SessionLocal()

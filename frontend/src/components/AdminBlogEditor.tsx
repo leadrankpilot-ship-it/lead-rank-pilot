@@ -10,6 +10,7 @@ import {
   updateAdminBlog,
   uploadAdminBlogImage,
 } from "@/lib/admin-api";
+import { BLOG_CATEGORIES, DEFAULT_BLOG_CATEGORY, normalizeBlogCategory } from "@/lib/blog-categories";
 
 function slugify(value: string) {
   return (
@@ -52,6 +53,7 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
         ? "published"
         : "draft",
   );
+  const [category, setCategory] = useState(normalizeBlogCategory(initial?.category || DEFAULT_BLOG_CATEGORY));
   const [related, setRelated] = useState<AdminRelatedLink[]>(initial?.related_links || []);
   const [pickBlogId, setPickBlogId] = useState("");
   const [customTitle, setCustomTitle] = useState("");
@@ -129,6 +131,7 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
       excerpt: excerpt.trim(),
       body,
       cover_image_url: coverUrl.trim(),
+      category: normalizeBlogCategory(category),
       published_on: publishedOn || null,
       read_time: readTime.trim() || "5 min",
       related_links: related,
@@ -278,6 +281,20 @@ export function AdminBlogEditor({ mode, initial = null, allBlogs = [] }: Props) 
                 placeholder="5 min"
                 className="lrp-input"
               />
+            </label>
+            <label className="col-span-2 space-y-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#6B7280]">Category</span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="lrp-input admin-filter-field"
+              >
+                {BLOG_CATEGORIES.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
             </label>
             <label className="col-span-2 space-y-1.5">
               <span className="text-[11px] font-bold uppercase tracking-[0.06em] text-[#6B7280]">Status</span>

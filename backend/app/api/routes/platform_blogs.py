@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.platform_blog import PlatformBlog
 from app.schemas.admin import AdminBlogOut, AdminRelatedLink
+from app.services.blog_categories import normalize_blog_category
 
 router = APIRouter(prefix="/platform-blogs", tags=["platform-blogs"])
 
@@ -46,6 +47,7 @@ def _serialize(row: PlatformBlog) -> AdminBlogOut:
         excerpt=row.excerpt or "",
         body=row.body or "",
         cover_image_url=row.cover_image_url or "",
+        category=normalize_blog_category(getattr(row, "category", None)),
         published_on=row.published_on,
         read_time=row.read_time or "5 min",
         related_links=_parse_links(row.related_links_json),

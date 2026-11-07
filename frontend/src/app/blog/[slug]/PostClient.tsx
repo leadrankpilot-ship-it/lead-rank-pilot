@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PublicSiteHeader } from "@/components/PublicSiteHeader";
+import { blogCategoryLabel } from "@/lib/blog-categories";
 import { PlatformBlog, getPlatformBlog } from "@/lib/api";
 
 export function PostClient() {
@@ -49,7 +50,10 @@ export function PostClient() {
                 className="mb-6 max-h-80 w-full rounded-xl object-cover"
               />
             ) : null}
-            <div className="flex flex-wrap gap-2 text-xs font-semibold text-sm-muted">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-sm-muted">
+              <span className="rounded-md bg-[#F5EDFF] px-2 py-0.5 text-[#7C3AED]">
+                {blogCategoryLabel(post.category)}
+              </span>
               {post.published_on ? <span>{new Date(post.published_on).toLocaleDateString()}</span> : null}
               {post.read_time ? <span>· {post.read_time}</span> : null}
             </div>
