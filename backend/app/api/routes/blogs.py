@@ -89,6 +89,11 @@ async def upload_blog_image(
         saved = await save_blog_image(file, slug_hint=slug_hint)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Image upload failed: {exc}",
+        ) from exc
     path = saved["path"]
     url = saved.get("url") or (
         path if path.startswith("http") else f"{str(request.base_url).rstrip('/')}{path}"

@@ -37,28 +37,43 @@ def slugify_filename(value: str, *, fallback: str = "image") -> str:
     return text or fallback
 
 
+def _strip_env(value: str) -> str:
+    text = (value or "").strip()
+    if len(text) >= 2 and text[0] == text[-1] and text[0] in {'"', "'"}:
+        text = text[1:-1].strip()
+    return text
+
+
+def _cloudinary_creds() -> tuple[str, str, str]:
+    cloud = _strip_env(settings.cloudinary_cloud_name)
+    key = _strip_env(settings.cloudinary_api_key)
+    secret = _strip_env(settings.cloudinary_api_secret)
+    if cloud and key and secret:
+        return cloud, key, secret
+
+    url = _strip_env(settings.cloudinary_url)
+    # cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+    if url.startswith("cloudinary://"):
+        rest = url[len("cloudinary://") :]
+        if "@" in rest and ":" in rest.split("@", 1)[0]:
+            auth, cloud_name = rest.rsplit("@", 1)
+            api_key, api_secret = auth.split(":", 1)
+            return cloud_name.strip(), api_key.strip(), api_secret.strip()
+    return "", "", ""
+
+
 def cloudinary_enabled() -> bool:
-    if (settings.cloudinary_url or "").strip():
-        return True
-    return bool(
-        (settings.cloudinary_cloud_name or "").strip()
-        and (settings.cloudinary_api_key or "").strip()
-        and (settings.cloudinary_api_secret or "").strip()
-    )
+    cloud, key, secret = _cloudinary_creds()
+    return bool(cloud and key and secret)
 
 
 def _configure_cloudinary() -> None:
     import cloudinary
 
-    if (settings.cloudinary_url or "").strip():
-        cloudinary.config(cloudinary_url=settings.cloudinary_url.strip(), secure=True)
-        return
-    cloudinary.config(
-        cloud_name=settings.cloudinary_cloud_name.strip(),
-        api_key=settings.cloudinary_api_key.strip(),
-        api_secret=settings.cloudinary_api_secret.strip(),
-        secure=True,
-    )
+    cloud, key, secret = _cloudinary_creds()
+    if not (cloud and key and secret):
+        raise ValueError("Cloudinary credentials are incomplete")
+    cloudinary.config(cloud_name=cloud, api_key=key, api_secret=secret, secure=True)
 
 
 def _extension_for(upload: UploadFile) -> str:
@@ -113,7 +128,10 @@ async def save_blog_image(upload: UploadFile, *, slug_hint: str | None = None) -
                 overwrite=False,
             )
 
-        result = await asyncio.to_thread(_upload)
+        try:
+            result = await asyncio.to_thread(_upload)
+        except Exception as exc:  # noqa: BLE001 — surface Cloudinary/API errors cleanly
+            raise ValueError(f"Cloudinary upload failed: {exc}") from exc
         secure_url = str(result.get("secure_url") or result.get("url") or "").strip()
         if not secure_url:
             raise ValueError("Cloudinary upload returned no URL")
