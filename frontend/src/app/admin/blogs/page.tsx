@@ -6,6 +6,19 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { AdminBlog, deleteAdminBlog, fetchAdminBlogs } from "@/lib/admin-api";
 import { SkeletonBones } from "@/components/ui";
 
+function formatBlogDate(value: string | null) {
+  if (!value) return null;
+  try {
+    return new Date(value).toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch {
+    return value;
+  }
+}
+
 function AdminBlogsPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -63,13 +76,13 @@ function AdminBlogsPageInner() {
         </div>
       ) : null}
 
-      <section className="lrp-card !p-0 overflow-hidden">
+      <section className="overflow-hidden">
         {loading ? (
-          <div className="p-5">
+          <div className="lrp-card p-5">
             <SkeletonBones rows={4} />
           </div>
         ) : blogs.length === 0 ? (
-          <div className="px-5 py-10 text-center">
+          <div className="lrp-card px-5 py-10 text-center">
             <p className="text-sm text-[#9CA3AF]">No blog posts yet.</p>
             <Link href="/admin/blogs/new" className="mt-3 inline-flex text-sm font-semibold text-[#7C3AED] hover:underline">
               Write the first post
@@ -77,62 +90,72 @@ function AdminBlogsPageInner() {
           </div>
         ) : (
           <div className="leads-scroll-panel admin-blogs-scroll overflow-auto !max-h-[calc(100vh-220px)]">
-            <table className="lrp-table admin-blogs-table min-w-[640px]">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Read time</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {blogs.map((b) => (
-                  <tr key={b.id} className={`lrp-row-in${deletingId === b.id ? " opacity-50" : ""}`}>
-                    <td>
-                      <Link href={`/admin/blogs/${b.id}`} className="font-semibold text-[#111827] hover:underline">
+            <ul className="admin-blogs-cards">
+              {blogs.map((b) => {
+                const dateLabel = formatBlogDate(b.published_on);
+                const meta = [dateLabel, b.read_time || null, b.status].filter(Boolean);
+                return (
+                  <li
+                    key={b.id}
+                    className={`admin-blog-card${deletingId === b.id ? " opacity-50" : ""}`}
+                  >
+                    <div className="admin-blog-card-thumb">
+                      {b.cover_image_url ? (
+                        <img src={b.cover_image_url} alt="" />
+                      ) : (
+                        <div className="admin-blog-card-thumb-fallback">LRP</div>
+                      )}
+                    </div>
+
+                    <div className="admin-blog-card-body">
+                      <Link href={`/admin/blogs/${b.id}`} className="admin-blog-card-title">
                         {b.title}
                       </Link>
-                      <p className="mt-0.5 font-mono text-xs text-[#9CA3AF]">/{b.slug}</p>
-                    </td>
-                    <td>
-                      <span
-                        className={`rounded-md px-2 py-0.5 text-[11px] font-bold uppercase ${
-                          b.status === "published"
-                            ? "bg-[#ECFDF5] text-[#059669]"
-                            : "bg-[#F3F4F6] text-[#6B7280]"
-                        }`}
+                      <p className="admin-blog-card-excerpt">
+                        {b.excerpt?.trim() || `/${b.slug}`}
+                      </p>
+                      <p className="admin-blog-card-meta">
+                        {meta.map((part, i) => (
+                          <span key={`${b.id}-meta-${i}`}>
+                            {i > 0 ? <span className="admin-blog-card-dot">·</span> : null}
+                            {part}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+
+                    <div className="admin-blog-card-actions">
+                      <Link
+                        href={`/admin/blogs/${b.id}`}
+                        className="admin-blog-icon-btn"
+                        aria-label={`Edit ${b.title}`}
+                        title="Edit"
                       >
-                        {b.status}
-                      </span>
-                    </td>
-                    <td className="text-sm text-[#6B7280]">
-                      {b.published_on ? new Date(b.published_on).toLocaleDateString() : "—"}
-                    </td>
-                    <td className="text-sm text-[#6B7280]">{b.read_time || "—"}</td>
-                    <td>
-                      <div className="flex flex-wrap justify-end gap-2">
-                        <Link
-                          href={`/admin/blogs/${b.id}`}
-                          className="lrp-btn lrp-btn-secondary !px-2.5 !py-1.5 text-xs"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          type="button"
-                          disabled={deletingId === b.id}
-                          onClick={() => void onDelete(b.id)}
-                          className="lrp-btn lrp-btn-secondary !px-2.5 !py-1.5 text-xs text-[#D63A2F] cursor-pointer disabled:opacity-50"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                        </svg>
+                      </Link>
+                      <button
+                        type="button"
+                        disabled={deletingId === b.id}
+                        onClick={() => void onDelete(b.id)}
+                        className="admin-blog-icon-btn admin-blog-icon-btn-danger"
+                        aria-label={`Delete ${b.title}`}
+                        title="Delete"
+                      >
+                        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M3 6h18" />
+                          <path d="M8 6V4h8v2" />
+                          <path d="M19 6l-1 14H6L5 6" />
+                          <path d="M10 11v6M14 11v6" />
+                        </svg>
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
       </section>
