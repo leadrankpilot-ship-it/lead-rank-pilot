@@ -3,6 +3,7 @@ from app.models.blog_topic import BlogTopic
 from app.models.job import Job
 from app.models.lead import Lead
 from app.models.plan_catalog import PlanCatalog
+from app.models.platform_blog import PlatformBlog
 from app.models.search_run import SearchRun
 from app.models.usage_ledger import UsageLedger
 from app.models.user import User
@@ -17,6 +18,7 @@ __all__ = [
     "Lead",
     "BlogTopic",
     "BlogPost",
+    "PlatformBlog",
     "UsageLedger",
     "WebsiteConnection",
     "PlanCatalog",

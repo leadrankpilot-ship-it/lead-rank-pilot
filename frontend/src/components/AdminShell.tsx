@@ -9,6 +9,7 @@ const NAV = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/users", label: "Users" },
   { href: "/admin/plans", label: "Plans" },
+  { href: "/admin/blogs", label: "Blogs" },
 ];
 
 const SIDEBAR_KEY = "lrp_admin_sidebar_collapsed";

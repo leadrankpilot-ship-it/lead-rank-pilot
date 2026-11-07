@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import (
     admin,
+    admin_blogs,
     auth,
     billing,
     blogs,
@@ -22,6 +23,8 @@ from app.api.routes import (
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.db.session import SessionLocal
+from app.db.session import engine
+from app.models.platform_blog import PlatformBlog
 from app.services.admin_seed import ensure_admin_user
 from app.services.db_maintenance import sync_id_sequences
 from app.services.image_upload import uploads_root
@@ -35,6 +38,11 @@ logger.info("main module loaded; cors=%s", settings.cors_origin_list)
 
 def _run_startup_jobs() -> None:
     """Seed + sequence repair + clear scrapes killed by the previous process."""
+    try:
+        # Safe if alembic hasn't run yet on a fresh deploy.
+        PlatformBlog.__table__.create(bind=engine, checkfirst=True)
+    except Exception:
+        logger.exception("platform_blogs table ensure skipped/failed")
     db = SessionLocal()
     try:
         sync_id_sequences(db)
@@ -90,6 +98,7 @@ app.add_middleware(
 app.include_router(health.router, prefix=settings.api_prefix)
 app.include_router(auth.router, prefix=settings.api_prefix)
 app.include_router(admin.router, prefix=settings.api_prefix)
+app.include_router(admin_blogs.router, prefix=settings.api_prefix)
 app.include_router(websites.router, prefix=settings.api_prefix)
 app.include_router(jobs.router, prefix=settings.api_prefix)
 app.include_router(searches.router, prefix=settings.api_prefix)

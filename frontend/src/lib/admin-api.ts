@@ -138,3 +138,92 @@ export async function updateAdminPlan(
     body: JSON.stringify(patch),
   });
 }
+
+export type AdminRelatedLink = {
+  title: string;
+  url: string;
+  related_post_id?: number | null;
+};
+
+export type AdminBlog = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  cover_image_url: string;
+  published_on: string | null;
+  read_time: string;
+  related_links: AdminRelatedLink[];
+  status: "draft" | "published" | string;
+  author_user_id: number | null;
+  created_at: string | null;
+  updated_at: string | null;
+};
+
+export type AdminBlogPayload = {
+  title: string;
+  slug?: string;
+  excerpt?: string;
+  body?: string;
+  cover_image_url?: string;
+  published_on?: string | null;
+  read_time?: string;
+  related_links?: AdminRelatedLink[];
+  status?: "draft" | "published";
+};
+
+export async function fetchAdminBlogs(): Promise<AdminBlog[]> {
+  return adminFetch("/api/admin/blogs");
+}
+
+export async function fetchAdminBlog(id: number): Promise<AdminBlog> {
+  return adminFetch(`/api/admin/blogs/${id}`);
+}
+
+export async function createAdminBlog(payload: AdminBlogPayload): Promise<AdminBlog> {
+  return adminFetch("/api/admin/blogs", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateAdminBlog(id: number, payload: Partial<AdminBlogPayload>): Promise<AdminBlog> {
+  return adminFetch(`/api/admin/blogs/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteAdminBlog(id: number): Promise<void> {
+  await adminFetch(`/api/admin/blogs/${id}`, { method: "DELETE" });
+}
+
+export async function uploadAdminBlogImage(
+  file: File,
+  slugHint?: string,
+): Promise<{ url: string; path: string; filename: string }> {
+  const form = new FormData();
+  form.append("file", file);
+  if (slugHint) form.append("slug_hint", slugHint);
+  const headers = new Headers();
+  const token = getAdminToken();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+  const res = await fetch(`${resolveApiUrl()}/api/admin/blogs/images`, {
+    method: "POST",
+    headers,
+    body: form,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Upload failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      /* ignore */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+}

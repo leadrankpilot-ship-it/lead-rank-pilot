@@ -19,6 +19,7 @@ _SERIAL_TABLES = (
     "leads",
     "blog_topics",
     "blog_posts",
+    "platform_blogs",
     "usage_ledger",
 )
 

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -55,3 +55,49 @@ class AdminPlanUpdate(BaseModel):
     search_daily_quota: int | None = Field(default=None, ge=0)
     websites_max: int | None = Field(default=None, ge=1)
     description: str | None = Field(default=None, max_length=2000)
+
+
+class AdminRelatedLink(BaseModel):
+    title: str = Field(min_length=1, max_length=300)
+    url: str = Field(min_length=1, max_length=2000)
+    related_post_id: int | None = None
+
+
+class AdminBlogOut(BaseModel):
+    id: int
+    title: str
+    slug: str
+    excerpt: str
+    body: str
+    cover_image_url: str
+    published_on: date | None = None
+    read_time: str
+    related_links: list[AdminRelatedLink] = Field(default_factory=list)
+    status: str
+    author_user_id: int | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+
+
+class AdminBlogCreate(BaseModel):
+    title: str = Field(min_length=1, max_length=500)
+    slug: str | None = Field(default=None, max_length=500)
+    excerpt: str = Field(default="", max_length=2000)
+    body: str = Field(default="")
+    cover_image_url: str = Field(default="", max_length=2000)
+    published_on: date | None = None
+    read_time: str = Field(default="5 min", max_length=50)
+    related_links: list[AdminRelatedLink] = Field(default_factory=list)
+    status: Literal["draft", "published"] = "draft"
+
+
+class AdminBlogUpdate(BaseModel):
+    title: str | None = Field(default=None, min_length=1, max_length=500)
+    slug: str | None = Field(default=None, max_length=500)
+    excerpt: str | None = Field(default=None, max_length=2000)
+    body: str | None = None
+    cover_image_url: str | None = Field(default=None, max_length=2000)
+    published_on: date | None = None
+    read_time: str | None = Field(default=None, max_length=50)
+    related_links: list[AdminRelatedLink] | None = None
+    status: Literal["draft", "published"] | None = None
